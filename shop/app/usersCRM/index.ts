@@ -1,16 +1,16 @@
 import {
     Store as VuexStore,
-    DispatchOptions,
-    CommitOptions,
-    Module,
+    type DispatchOptions,
+    type CommitOptions,
+    type Module,
   } from 'vuex';
   
-  import { RootState } from '@/app/store/index.d';
+  import { type RootState } from '@/app/index.d';
   
   import { state }  from './state';
-  import { actions, Actions } from './actions';
-  import { getters, Getters } from './getters';
-  import { mutations, Mutations } from './mutations';
+  import { actions, type Actions } from './actions';
+  import { getters, type Getters } from './getters';
+  import { mutations, type Mutations } from './mutations';
   
   import type { State } from './state';
   
@@ -50,5 +50,5 @@ import {
     ): ReturnType<NamespacedActions[K]>;
   };
 
-export { State };
+export { type State };
 export const NAMESPACE = 'usersCRM'
