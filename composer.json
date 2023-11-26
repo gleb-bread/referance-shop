@@ -1,0 +1,6 @@
+{
+    "require": {
+        "psr/log": "^3.0",
+        "imangazaliev/didom": "^2.0"
+    }
+}
