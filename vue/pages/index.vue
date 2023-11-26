@@ -1,7 +1,11 @@
 <template>
-    <v-container class="d-flex h-100-vh w-100-vw">
-        <index-components-primary-tabs>
+    <v-container class="h-100-vh w-100-vw">
+        <index-components-primary-tabs
+          @update:tab="currectTab = $event">
         </index-components-primary-tabs>
+        <index-components-shop-container
+          :currect-tab="currectTab">
+        </index-components-shop-container>
     </v-container>
 </template>
 
@@ -25,7 +29,7 @@ export default defineComponent({
   
   data() {
     return {
-
+      currectTab: '',
     };
   },
   

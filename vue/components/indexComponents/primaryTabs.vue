@@ -46,10 +46,6 @@ import { defineComponent } from 'vue';
 import { PropType } from 'vue';
     
 export default defineComponent({
-    props: {
-        
-    },
-    
     emits: {
         'update:tab': (str: string) => true,
     },
