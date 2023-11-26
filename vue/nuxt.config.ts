@@ -2,7 +2,7 @@ import vuetify from "vite-plugin-vuetify";
 
 // PWA Config
 const title = "Vuetify 3 + Nuxt 3 Starter";
-const shortTitle = "Vuetify 3 + Nuxt 3 Starter";
+const shortTitle = "CoffeX";
 const description = "Template to get you up and running with Nuxt 3 & Vuetify 3";
 const image = "https://vuetify3nuxt3starter.behonbaker.com/starter.png";
 const url = "https://vuetify3nuxt3starter.behonbaker.com/";
@@ -10,7 +10,10 @@ const url = "https://vuetify3nuxt3starter.behonbaker.com/";
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   // import styles
-  css: ["@/assets/main.scss"],
+  css: [
+    "@/assets/main.scss",
+    '@mdi/font/css/materialdesignicons.min.css',
+  ],
   devtools: { enabled: true },
   // enable takeover mode
   typescript: { shim: false },
@@ -27,12 +30,11 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: "Vuetify 3 + Nuxt 3 Starter",
-      titleTemplate: "%s | Vuetify 3 + Nuxt 3 Starter",
+      titleTemplate: "%s | СoffeX",
       link: [
         { rel: "stylesheet", href: "https://rsms.me/inter/inter.css" },
         { rel: "preconnect", href: "https://rsms.me/" },
-        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+        { rel: "icon", type: "image/x-icon", href: "favicon.ico" },
         { rel: "canonical", href: url },
       ],
       meta: [

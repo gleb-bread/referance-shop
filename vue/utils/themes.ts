@@ -33,3 +33,20 @@ export const dark: ThemeDefinition = {
     warning: twColors.amber[500],
   },
 };
+
+export const PRIMARY_THEME = 'primaryTheme'; 
+
+export const primaryTheme: ThemeDefinition = {
+  dark: false,
+
+  colors: {
+    background: twColors.indigo[50],
+    surface: twColors.lime[900],
+    primary: twColors.orange[500],
+    secondary: twColors.orange[700],
+    error: twColors.red[700],
+    info: twColors.teal[700],
+    success: twColors.lime[700],
+    warning: twColors.yellow[900],
+  }
+};

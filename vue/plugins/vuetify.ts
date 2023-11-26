@@ -1,4 +1,5 @@
 import { createVuetify } from "vuetify";
+import { aliases, mdi } from 'vuetify/iconsets/mdi';
 
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
@@ -6,10 +7,11 @@ export default defineNuxtPlugin((app) => {
     defaults,
     // add theme
     theme: {
-      defaultTheme: LIGHT_THEME,
+      defaultTheme: PRIMARY_THEME,
       themes: {
         light,
         dark,
+        primaryTheme,
       },
       // add color variations
       //   variations: {
@@ -20,10 +22,10 @@ export default defineNuxtPlugin((app) => {
     },
     // Add the custom iconset
     icons: {
-      defaultSet: "custom",
+      defaultSet: "mdi",
       aliases,
       sets: {
-        custom,
+        mdi,
       },
     },
   });

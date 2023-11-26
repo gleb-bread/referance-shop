@@ -39,6 +39,7 @@ const aliases: IconAliases = {
   minus: "ph:minus",
   sortAsc: "ph:sort-ascending",
   sortDesc: "ph:sort-descending",
+  calendar:"",
 };
 
 const custom: IconSet = {
