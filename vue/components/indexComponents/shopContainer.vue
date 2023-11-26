@@ -1,5 +1,10 @@
 <template>
-    
+    <v-row>
+        <v-col>
+            <shop-item>
+            </shop-item>
+        </v-col>
+    </v-row>
 </template>
 
 <script lang='ts'>
