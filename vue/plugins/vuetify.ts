@@ -4,6 +4,7 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi';
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
     ssr: true,
+    aliases: vuetifyAliases,
     defaults,
     // add theme
     theme: {

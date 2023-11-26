@@ -18,4 +18,14 @@ export const defaults: DefaultsInstance = {
 		variant: "outlined",
 		density: "comfortable",
 	},
+
+	[NamesVuetifyAliases.vTabsImg]: {
+		class: ['v-tabs--img'],
+		hideSlider: true, 
+		VTab: {
+			color: 'primary',
+			hideSlider: true, 
+			class: ['pa-3'],
+		}
+	}
 };
