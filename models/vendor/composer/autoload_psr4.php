@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'parser\\' => array('/parser'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
     'DiDom\\' => array($vendorDir . '/imangazaliev/didom/src/DiDom'),
 );
