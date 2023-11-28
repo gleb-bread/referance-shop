@@ -1,10 +1,9 @@
 <?php
     require_once __DIR__ . '/models/vendor/autoload.php';
+    
+    use parser;
 
-    use DiDom\Document;
-    use Parser;
-
-    $model = new Parser\ParserA;
+    $model = new parser\ParserA;
 
     
 ?>

@@ -1,12 +1,8 @@
 {
     "autoload": {
         "psr-4": {
-            "parser\\": "/parser"
+            "parser\\": "parser/"
         }
-    },
-
-    "require": {
-        "psr/log": "^3.0",
-        "imangazaliev/didom": "^2.0"
     }
+
 }
