@@ -29,8 +29,7 @@ class LinkStore
         self::$catalogLinkName = $newCatalogName;
     }
 
-    public function getHTMLPage($url=''){
-        
+    public function getHTMLPage($url=''){ 
         if(is_string($url) && !strlen($url)){
             return new Document(self::$baseUrl, true);
         } else {
@@ -107,7 +106,7 @@ class LinkStore
 
         foreach($links as $link){
             $link = $link->getAttribute('href');
-
+            
             $nameProduct = self::$productLinkName;
 
             if(strpos($link, $nameProduct)){
