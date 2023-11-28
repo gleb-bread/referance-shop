@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'parser\\' => array($baseDir . '/parser'),
+    'DiDom\\' => array($vendorDir . '/imangazaliev/didom/src/DiDom'),
 );

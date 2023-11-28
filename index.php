@@ -3,7 +3,21 @@
     
     use parser;
 
-    $model = new parser\ParserA;
+    $model = new parser\LinkStore('https://moscow.petrovich.ru/');
+    $parserPetrovich = new parser\PetrovichParser;
 
+    $document = $model->getHTMLPage();
+
+    $linksCatalog = $model::getCatalogLinks($document);
+    $linksProducts = $model::getProdsuctLinks($document);
+
+    if(count($linksProducts) != 0){
+        foreach($linksProducts as $link){
+            $pageProduct = $model->getHTMLPage($link);
+            var_dump($parserPetrovich->parsingPage($pageProduct));
+            exit();
+        }
+    }
+   
     
 ?>
