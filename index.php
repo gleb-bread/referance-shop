@@ -1,5 +1,11 @@
 <?php
     require_once __DIR__ . '/models/vendor/autoload.php';
+
+    
+    use DiDom\Document;
+
+    echo new Document('https://moscow.petrovich.ru', true);
+
     
     //use parser;
 
@@ -17,6 +23,4 @@
     //     }
     // }
     
-    $result = file_get_contents('https://api.petrovich.ru/catalog/v4/products/680046?city_code=msk&client_id=pet_site');
-    echo $result;
 ?>
