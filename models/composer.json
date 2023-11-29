@@ -3,8 +3,5 @@
         "psr-4": {
             "parser\\": "parser/"
         }
-    },
-    "require": {
-        "imangazaliev/didom": "2.0"
     }
 }

@@ -11,20 +11,12 @@ class ComposerStaticInit69af50b98e0a97ca0c16712e78d4e587
         array (
             'parser\\' => 7,
         ),
-        'D' => 
-        array (
-            'DiDom\\' => 6,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'parser\\' => 
         array (
             0 => __DIR__ . '/../..' . '/parser',
-        ),
-        'DiDom\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/imangazaliev/didom/src/DiDom',
         ),
     );
 
