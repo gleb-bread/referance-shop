@@ -1,5 +1,6 @@
 import vuetify from "vite-plugin-vuetify";
 
+
 // PWA Config
 const title = "Vuetify 3 + Nuxt 3 Starter";
 const shortTitle = "CoffeX";
@@ -27,6 +28,12 @@ export default defineNuxtConfig({
       });
     },
   ],
+  
+  nitro: {
+    externals: {
+      inline: ['uuid'],
+    },
+  },
 
   app: {
     head: {

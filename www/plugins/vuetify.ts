@@ -2,6 +2,7 @@ import { createVuetify } from "vuetify";
 import { aliases, mdi } from 'vuetify/iconsets/mdi';
 
 export default defineNuxtPlugin((app) => {
+
   const vuetify = createVuetify({
     ssr: true,
     aliases: vuetifyAliases,
@@ -31,5 +32,6 @@ export default defineNuxtPlugin((app) => {
     },
   });
 
-  app.vueApp.use(vuetify);
+  app.vueApp
+    .use(vuetify);
 });
