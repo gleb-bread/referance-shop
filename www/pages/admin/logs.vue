@@ -24,6 +24,7 @@ export default defineComponent({
     data() {
         return {
           menuStore: useMenuStore(),
+          title: 'Логи',
         };
     },
     
@@ -36,7 +37,7 @@ export default defineComponent({
     },
 
     mounted(){
-      this.menuStore.setMenuTitle(this.menuStore, 'Логи');
+      this.menuStore.setMenuTitle(this.menuStore, this.title);
     }
 
 }); 
