@@ -1,14 +1,13 @@
 <template>
-	<div>
-		<VApp>
-			<VMain>
-				<header-app>
-				</header-app>
-				<slot />
-				
-			</VMain>
-		</VApp>
-	</div>
+	<v-app>
+		<header-app>
+		</header-app>
+		<v-main>
+			<header-menu>
+			</header-menu>
+			<slot></slot>
+		</v-main>
+	</v-app>
 </template>
 
 <script lang='ts'>

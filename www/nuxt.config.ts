@@ -21,6 +21,7 @@ export default defineNuxtConfig({
   build: { transpile: ["vuetify"] },
   modules: [
     "@kevinmarrec/nuxt-pwa",
+    '@pinia/nuxt',
     async (options, nuxt) => {
       nuxt.hooks.hook("vite:extendConfig", (config) => {
         config.plugins ||= [];
@@ -33,6 +34,10 @@ export default defineNuxtConfig({
     externals: {
       inline: ['uuid'],
     },
+  },
+
+  pinia: {
+    storesDirs: ['./stores/**', './custom-folder/stores/**'],
   },
 
   app: {

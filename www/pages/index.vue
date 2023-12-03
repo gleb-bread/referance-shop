@@ -13,6 +13,7 @@
   
 import { defineComponent } from 'vue';
 import { PropType } from 'vue';
+import { useMenuStore } from '~/stores/menu';
   
 export default defineComponent({
   props: {
@@ -30,6 +31,7 @@ export default defineComponent({
   data() {
     return {
       currectTab: '',
+      menuStore: useMenuStore(),
     };
   },
   
@@ -40,6 +42,11 @@ export default defineComponent({
   components: {
 
   },
+
+  mounted(){
+    this.menuStore.setMenuTitle(this.menuStore, 'Главная страница');
+  }
+
 });
 </script>
 

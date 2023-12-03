@@ -7,19 +7,18 @@ export default defineNuxtPlugin((app) => {
         
         let tokenUser = useCookie('user_token');
 
-        let data = {
+        let params = {
             'user_token': tokenUser.value || v4(),
         };
 
 
-        let result = await $fetch('http://localhost:8888//api/users', { 
+        const {data, status} = await useLazyFetch('http://localhost:8888//api/users', { 
             method: 'GET',
-            query: data,
-            
+            query: params,
         });
 
-        if(result){
-            tokenUser.value = tokenUser.value ? tokenUser.value : data.user_token;
+        if(status.value != 'error'){
+            tokenUser.value = tokenUser.value ? tokenUser.value : params.user_token;
         }
 
     }

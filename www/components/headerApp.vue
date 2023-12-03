@@ -4,17 +4,19 @@
         color="primary">
         <template #prepend>
             <v-btn
+                @click.stop="handlerClickMenu"
                 icon="mdi-menu">
             </v-btn>
         </template>
         <v-app-bar-title>
-            Главная страница 
+            {{ getTitle }} 
         </v-app-bar-title>
     </v-app-bar>
 </template>
 
 <script lang='ts'>
 import { defineComponent } from 'vue';
+import { useMenuStore } from '~/stores/menu';
     
 export default defineComponent({
     
@@ -23,18 +25,23 @@ export default defineComponent({
     },
     
     computed: {
-        
+        getTitle(){
+            return this.menuStore.getMenuTitle;
+        }
     },
     
     data() {
         return {
-            
+            menuStore: useMenuStore(),
         };
     },
     
     methods: {
-        
+        handlerClickMenu(){
+            this.menuStore.setMenuShow(this.menuStore, !this.menuStore.getMenuShow);
+        }
     },
+
     
     components: {
         
