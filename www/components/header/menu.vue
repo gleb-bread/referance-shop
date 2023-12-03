@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer
         color="secondary"
-        v-model="store.getMenuShow">
+        v-model="getMenuShow">
         <v-list
             v-model:opened="open">
             <v-list-item
@@ -43,12 +43,19 @@ export default defineComponent({
     },
     
     computed: {
-        
+        getMenuShow: {
+            get(){
+                return this.menuStore.getMenuShow;
+            },
+            set(flag: boolean){
+                this.menuStore.setMenuShow(this.menuStore, flag);
+            }
+        }
     },
     
     data() {
         return {
-            store: useMenuStore(),
+            menuStore: useMenuStore(),
 
             groupListAdmin: false,
 
@@ -70,6 +77,11 @@ export default defineComponent({
                     title: 'Права',
                     link: '/admin/rights',
                     prependIcon: 'mdi-security',
+                },
+                {
+                    title: 'Cоздание прав',
+                    link: '/admin/add_rights',
+                    prependIcon: 'mdi-creation',
                 }
             ],
 
