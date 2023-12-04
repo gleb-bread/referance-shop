@@ -5,7 +5,12 @@ export interface MenuState {
 
 export interface ParserProductsState {
     products: ParserProductsType[],
+    loading: boolean,
+    update: boolean,
+    errorLoading: boolean,
+    errorUpdate: boolean,
 }
+
 
 export type ParserProductsType = {
     id: number,

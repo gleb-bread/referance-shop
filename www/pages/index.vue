@@ -1,12 +1,28 @@
 <template>
-    <v-container class="h-100-vh w-100-vw">
-        <index-components-primary-tabs
-          @update:tab="currectTab = $event">
-        </index-components-primary-tabs>
-        <index-components-shop-container
-          :currect-tab="currectTab">
-        </index-components-shop-container>
-    </v-container>
+  <template v-if="parsingProducts.getLoading || parsingProducts.getError">
+    <div
+      class="h-screen w-screen d-flex justify-center"
+      :class="{ 'align-center': !parsingProducts.getError }">
+      <v-progress-circular
+          v-if="parsingProducts.getLoading && !parsingProducts.getError"
+          indeterminate
+          :size="58"
+          :width="8"
+          color="primary">
+        </v-progress-circular>
+        <v-alert
+          v-if="parsingProducts.getError"
+          max-height="100px"
+          type="error"
+          rounded="0"
+          title="Ошибка"
+          text="Произошла ошибка загрузки">
+        </v-alert>
+      </div>
+  </template>
+  <index-components-shop-container
+    :currect-tab="currectTab">
+  </index-components-shop-container>
 </template>
 
 <script lang='ts'>

@@ -1,5 +1,5 @@
 <template>
-    <v-lazy
+    <!-- <v-lazy
         class="w-100">
         <div class="mt-10 w-100">
             <v-tabs-img
@@ -37,7 +37,7 @@
                 </v-tab>
             </v-tabs-img>
         </div>
-    </v-lazy>
+    </v-lazy> -->
 </template>
 
 <script lang='ts'>

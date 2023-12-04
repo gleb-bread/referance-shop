@@ -122,6 +122,12 @@ export default defineNuxtConfig({
       description: description,
     },
   },
+
+  runtimeConfig: {
+    public: {
+      heightWindow: 'calc(100vh - 64px)',
+    }
+  }
 });
 
 

@@ -3,6 +3,7 @@ import { fetchRequest } from "../primary";
 
 export const actions = {
     async setParserProducts(context: ParserProductsState, page: number = 1){
+        context.loading = true;
         const data = await fetchRequest(`api/parser_products`,{
             method: 'GET',
             query: {
@@ -13,7 +14,12 @@ export const actions = {
         if(data.value){
             let defaultData = getJSONPasrsingObject(data.value as unknown as string);
             context.products = defaultData;
-        } 
+            context.loading = false;
+            context.errorLoading = false;
+        } else {
+            context.loading = false;
+            // context.errorLoading = true;
+        }
     },
 }
 
