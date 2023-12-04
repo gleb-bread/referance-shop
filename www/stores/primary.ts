@@ -1,11 +1,20 @@
 import { GlobalVars } from "./options";
-import { UseFetchOptions } from "nuxt/app";
+import { useCookie } from "nuxt/app";
 
-export const fetchRequest = async function(url: string, opts?: UseFetchOptions<_ResT, DataT, PickKeys, DefaultT, ReqT, Method>){
+export const fetchRequest = async function(url: string, opts: any){
     let mainSait = GlobalVars.sait;
     if(mainSait[mainSait.length - 1] != '/') mainSait = mainSait + '/';
     if(url[url.length - 1] == '/') url = url.substring(0, url.length - 1);
 
-    const { data, error } = await useFetch(`${GlobalVars.sait}${url}`, opts);
-    return {data: data, error: error};
+    console.log(`${mainSait}${url}`);
+
+    opts = {...opts, ...{
+        query: {
+            ...opts.query,
+            ...{'user_token': useCookie('user_token')},
+        }
+    }};
+
+    const { data } = await useFetch(`${mainSait}${url}`, opts);
+    return data;
 }

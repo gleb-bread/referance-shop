@@ -8,17 +8,32 @@ export default defineNuxtPlugin((app) => {
     //     let tokenUser = useCookie('user_token');
 
     //     let params = {
-    //         'user_token': tokenUser,
+    //         'id': `12`,
     //     };
 
-
-    //     const {data, status} = await useLazyFetch('http://localhost:8888//api/parser_products', { 
+    //     const {data, error} = await fetchRequest('api/parser_products', { 
     //         method: 'GET',
     //         query: params,
     //     });
 
-    //     console.log(data.value);
+    //     console.log(error.value?.statusCode);
 
+    // }
+
+    // const fetchRequest = async function(url: string, opts: any){
+    //     let mainSait = 'http://localhost:8888';
+    //     if(mainSait[mainSait.length - 1] != '/') mainSait = mainSait + '/';
+    //     if(url[url.length - 1] == '/') url = url.substring(0, url.length - 1);
+    
+    //     opts = {...opts, ...{
+    //         query: {
+    //             ...opts.query,
+    //             ...{'user_token': useCookie('user_token')},
+    //         }
+    //     }};
+    
+    //     const { data, error } = await useFetch(`${mainSait}${url}`, opts);
+    //     return {data: data, error: error};
     // }
 
     // app.vueApp

@@ -32,6 +32,7 @@ export default defineComponent({
     return {
       currectTab: '',
       menuStore: useMenuStore(),
+      parsingProducts: useParserProductsStore(),
     };
   },
   
@@ -41,6 +42,10 @@ export default defineComponent({
   
   components: {
 
+  },
+
+  async created(){
+    await this.parsingProducts.setParserProducts(this.parsingProducts);
   },
 
   mounted(){
