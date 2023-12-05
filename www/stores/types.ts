@@ -5,6 +5,8 @@ export interface MenuState {
 
 export interface ParserProductsState {
     products: ParserProductsType[],
+    categories: {[key: string]: string[]},
+    imagesForCategory: {[key: string]: string},
     loading: boolean,
     update: boolean,
     errorLoading: boolean,

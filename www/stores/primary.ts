@@ -6,8 +6,6 @@ export const fetchRequest = async function(url: string, opts: any){
     if(mainSait[mainSait.length - 1] != '/') mainSait = mainSait + '/';
     if(url[url.length - 1] == '/') url = url.substring(0, url.length - 1);
 
-    console.log(`${mainSait}${url}`);
-
     opts = {...opts, ...{
         query: {
             ...opts.query,

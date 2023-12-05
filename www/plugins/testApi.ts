@@ -8,15 +8,14 @@ export default defineNuxtPlugin((app) => {
     //     let tokenUser = useCookie('user_token');
 
     //     let params = {
-    //         'id': `12`,
     //     };
 
-    //     const {data, error} = await fetchRequest('api/parser_products', { 
+    //     const {data, error} = await fetchRequest('api/parser_products/images', { 
     //         method: 'GET',
     //         query: params,
     //     });
 
-    //     console.log(error.value?.statusCode);
+    //     console.log(data.value);
 
     // }
 

@@ -5,6 +5,14 @@ export const getters = {
         return state.products;
     },
 
+    getParserCategories(state: ParserProductsState){
+        return state.categories;
+    },
+
+    getParserImageCategories(state: ParserProductsState){
+        return state.imagesForCategory;
+    },
+
     getLoading(state: ParserProductsState){
         return state.loading;
     },

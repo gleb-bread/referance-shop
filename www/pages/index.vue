@@ -20,8 +20,11 @@
         </v-alert>
       </div>
   </template>
-  <index-components-shop-container>
-  </index-components-shop-container>
+  <template
+    v-else>
+    <index-components-categories>
+    </index-components-categories>
+  </template>
 </template>
 
 <script lang='ts'>
@@ -40,7 +43,13 @@ export default defineComponent({
   },
   
   computed: {
-    
+    getCategories(){
+      return this.parsingProducts.getParserCategories;
+    },
+
+    getImagesCategories(){
+      return this.parsingProducts.getParserImageCategories;
+    }
   },
   
   data() {
@@ -59,8 +68,9 @@ export default defineComponent({
 
   },
 
-  async created(){
-    await this.parsingProducts.setParserProducts(this.parsingProducts);
+  created(){
+    this.parsingProducts.setParserCategories(this.parsingProducts);
+    this.parsingProducts.setImgOnCategory(this.parsingProducts);
   },
 
   mounted(){
