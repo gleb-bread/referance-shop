@@ -37,7 +37,7 @@ export default defineNuxtConfig({
   },
 
   pinia: {
-    storesDirs: ['./stores/**', './custom-folder/stores/**'],
+    storesDirs: ['./stores/*/index.*', './custom-folder/stores/**'],
   },
 
   app: {

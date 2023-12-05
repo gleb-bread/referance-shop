@@ -20,8 +20,7 @@
         </v-alert>
       </div>
   </template>
-  <index-components-shop-container
-    :currect-tab="currectTab">
+  <index-components-shop-container>
   </index-components-shop-container>
 </template>
 

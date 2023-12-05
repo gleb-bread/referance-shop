@@ -21,16 +21,10 @@
     
 import { defineComponent } from 'vue';
 import { PropType } from 'vue';
-import { ParserProductsType } from '#imports';
+import { ParserProductsType } from '~/stores/types';
 import * as StructHelper from '~/shared/helpers/structHelper';
     
 export default defineComponent({
-    props: {
-        currectTab: {
-            type: String,
-            required: true,
-        }
-    },
     
     emits: {
         
