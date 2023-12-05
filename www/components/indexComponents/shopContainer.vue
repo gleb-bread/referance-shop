@@ -40,12 +40,14 @@ export default defineComponent({
         currectCell(): {cells: number, size: number}{
             if(this.$vuetify.display.width > 2100){
                 return {cells: 6, size: 2};
-            } else if(this.$vuetify.display.width > 1024){
+            } else if(this.$vuetify.display.width > 1800){
                 return {cells: 4, size: 3};
-            } else if(this.$vuetify.display.width > 800){
+            } else if(this.$vuetify.display.width > 1024){
                 return {cells: 3, size: 4};
-            } else if (this.$vuetify.display.width > 500) {
+            } else if(this.$vuetify.display.width > 800){
                 return {cells: 2, size: 6};
+            } else if (this.$vuetify.display.width > 500) {
+                return {cells: 1, size: 12};
             }
             return {cells: 1, size: 12};
         },
