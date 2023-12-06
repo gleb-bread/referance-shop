@@ -1,9 +1,10 @@
-import { version as version$1, unref, inject as inject$1, warn, ref, computed, provide, defineComponent as defineComponent$1, getCurrentInstance as getCurrentInstance$1, readonly, watch, onScopeDispose, toRaw, toRefs, isRef, createVNode, Fragment, toRef, mergeProps, Text, watchEffect, Transition, resolveDynamicComponent, withDirectives, resolveDirective, shallowRef, hasInjectionContext, reactive, capitalize, effectScope, TransitionGroup, h, camelize, nextTick, useSSRContext, createApp, onErrorCaptured, onServerPrefetch, shallowReactive, isReadonly, defineAsyncComponent, isShallow, isReactive, withCtx, Suspense } from 'vue';
-import { f as useRuntimeConfig$1, m as withQuery, n as hasProtocol, p as parseURL, o as isScriptProtocol, j as joinURL, i as createError$1, $ as $fetch, q as sanitizeStatusCode, r as createHooks, t as defu } from '../nitro/node-server.mjs';
+import { version as version$1, unref, inject as inject$1, ref, toRef, getCurrentInstance as getCurrentInstance$1, onServerPrefetch, computed, reactive, warn, provide, defineComponent as defineComponent$1, readonly, watch, onScopeDispose, toRaw, toRefs, isRef, createVNode, Fragment, mergeProps, Text, watchEffect, Transition, resolveDynamicComponent, withDirectives, resolveDirective, shallowRef, hasInjectionContext, capitalize, effectScope, TransitionGroup, h, camelize, nextTick, useSSRContext, createApp, isReactive, getCurrentScope, onErrorCaptured, shallowReactive, isReadonly, markRaw, defineAsyncComponent, isShallow, withCtx, Suspense } from 'vue';
+import { f as useRuntimeConfig$1, m as withQuery, n as hasProtocol, p as parseURL, o as isScriptProtocol, j as joinURL, i as createError$1, q as hash, r as parse, t as getRequestHeader, $ as $fetch, v as sanitizeStatusCode, x as destr, y as isEqual$1, z as setCookie, A as getCookie, B as deleteCookie, C as createHooks, D as defu } from '../nitro/node-server.mjs';
 import { getActiveHead } from 'unhead';
 import { defineHeadPlugin } from '@unhead/shared';
 import { createMemoryHistory, createRouter, START_LOCATION, useRoute as useRoute$1, RouterView } from 'vue-router';
 import { ssrRenderSuspense, ssrRenderComponent, ssrRenderVNode, ssrRenderAttrs } from 'vue/server-renderer';
+import crypto from 'crypto';
 import 'node:http';
 import 'node:https';
 import 'node:zlib';
@@ -113,6 +114,63 @@ const defaultNamespace = _globalThis$1[globalKey$2] || (_globalThis$1[globalKey$
 const getContext = (key, opts = {}) => defaultNamespace.get(key, opts);
 const asyncHandlersKey$1 = "__unctx_async_handlers__";
 const asyncHandlers$1 = _globalThis$1[asyncHandlersKey$1] || (_globalThis$1[asyncHandlersKey$1] = /* @__PURE__ */ new Set());
+
+const rnds8Pool = new Uint8Array(256); // # of random values to pre-allocate
+
+let poolPtr = rnds8Pool.length;
+function rng() {
+  if (poolPtr > rnds8Pool.length - 16) {
+    crypto.randomFillSync(rnds8Pool);
+    poolPtr = 0;
+  }
+
+  return rnds8Pool.slice(poolPtr, poolPtr += 16);
+}
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+
+const byteToHex = [];
+
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 0x100).toString(16).slice(1));
+}
+
+function unsafeStringify(arr, offset = 0) {
+  // Note: Be careful editing this code!  It's been tuned for performance
+  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
+}
+
+const native = {
+  randomUUID: crypto.randomUUID
+};
+
+function v4(options, buf, offset) {
+  if (native.randomUUID && !buf && !options) {
+    return native.randomUUID();
+  }
+
+  options = options || {};
+  const rnds = options.random || (options.rng || rng)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+
+  rnds[6] = rnds[6] & 0x0f | 0x40;
+  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
+
+  if (buf) {
+    offset = offset || 0;
+
+    for (let i = 0; i < 16; ++i) {
+      buf[offset + i] = rnds[i];
+    }
+
+    return buf;
+  }
+
+  return unsafeStringify(rnds);
+}
 
 const appConfig = useRuntimeConfig$1().app;
 const baseURL = () => appConfig.baseURL;
@@ -327,7 +385,7 @@ function injectHead() {
 }
 const LayoutMetaSymbol = Symbol("layout-meta");
 const PageRouteSymbol = Symbol("route");
-const useRouter = () => {
+const useRouter$1 = () => {
   var _a;
   return (_a = /* @__PURE__ */ useNuxtApp()) == null ? void 0 : _a.$router;
 };
@@ -371,7 +429,7 @@ const navigateTo = (to, options) => {
     }
   }
   const inMiddleware = isProcessingMiddleware();
-  const router = useRouter();
+  const router = useRouter$1();
   const nuxtApp = /* @__PURE__ */ useNuxtApp();
   {
     if (nuxtApp.ssrContext) {
@@ -434,6 +492,231 @@ const createError = (err) => {
   _err.__nuxt_error = true;
   return _err;
 };
+const getDefault = () => null;
+function useAsyncData(...args) {
+  const autoKey = typeof args[args.length - 1] === "string" ? args.pop() : void 0;
+  if (typeof args[0] !== "string") {
+    args.unshift(autoKey);
+  }
+  let [key, handler, options = {}] = args;
+  if (typeof key !== "string") {
+    throw new TypeError("[nuxt] [asyncData] key must be a string.");
+  }
+  if (typeof handler !== "function") {
+    throw new TypeError("[nuxt] [asyncData] handler must be a function.");
+  }
+  options.server = options.server ?? true;
+  options.default = options.default ?? getDefault;
+  options.lazy = options.lazy ?? false;
+  options.immediate = options.immediate ?? true;
+  const nuxt = /* @__PURE__ */ useNuxtApp();
+  const getCachedData = () => nuxt.isHydrating ? nuxt.payload.data[key] : nuxt.static.data[key];
+  const hasCachedData = () => getCachedData() !== void 0;
+  if (!nuxt._asyncData[key] || !options.immediate) {
+    nuxt._asyncData[key] = {
+      data: ref(getCachedData() ?? options.default()),
+      pending: ref(!hasCachedData()),
+      error: toRef(nuxt.payload._errors, key),
+      status: ref("idle")
+    };
+  }
+  const asyncData = { ...nuxt._asyncData[key] };
+  asyncData.refresh = asyncData.execute = (opts = {}) => {
+    if (nuxt._asyncDataPromises[key]) {
+      if (opts.dedupe === false) {
+        return nuxt._asyncDataPromises[key];
+      }
+      nuxt._asyncDataPromises[key].cancelled = true;
+    }
+    if ((opts._initial || nuxt.isHydrating && opts._initial !== false) && hasCachedData()) {
+      return getCachedData();
+    }
+    asyncData.pending.value = true;
+    asyncData.status.value = "pending";
+    const promise = new Promise(
+      (resolve, reject) => {
+        try {
+          resolve(handler(nuxt));
+        } catch (err) {
+          reject(err);
+        }
+      }
+    ).then((_result) => {
+      if (promise.cancelled) {
+        return nuxt._asyncDataPromises[key];
+      }
+      let result = _result;
+      if (options.transform) {
+        result = options.transform(_result);
+      }
+      if (options.pick) {
+        result = pick$1(result, options.pick);
+      }
+      asyncData.data.value = result;
+      asyncData.error.value = null;
+      asyncData.status.value = "success";
+    }).catch((error) => {
+      if (promise.cancelled) {
+        return nuxt._asyncDataPromises[key];
+      }
+      asyncData.error.value = error;
+      asyncData.data.value = unref(options.default());
+      asyncData.status.value = "error";
+    }).finally(() => {
+      if (promise.cancelled) {
+        return;
+      }
+      asyncData.pending.value = false;
+      nuxt.payload.data[key] = asyncData.data.value;
+      if (asyncData.error.value) {
+        nuxt.payload._errors[key] = createError(asyncData.error.value);
+      }
+      delete nuxt._asyncDataPromises[key];
+    });
+    nuxt._asyncDataPromises[key] = promise;
+    return nuxt._asyncDataPromises[key];
+  };
+  const initialFetch = () => asyncData.refresh({ _initial: true });
+  const fetchOnServer = options.server !== false && nuxt.payload.serverRendered;
+  if (fetchOnServer && options.immediate) {
+    const promise = initialFetch();
+    if (getCurrentInstance$1()) {
+      onServerPrefetch(() => promise);
+    } else {
+      nuxt.hook("app:created", () => promise);
+    }
+  }
+  const asyncDataPromise = Promise.resolve(nuxt._asyncDataPromises[key]).then(() => asyncData);
+  Object.assign(asyncDataPromise, asyncData);
+  return asyncDataPromise;
+}
+function pick$1(obj, keys) {
+  const newObj = {};
+  for (const key of keys) {
+    newObj[key] = obj[key];
+  }
+  return newObj;
+}
+function useRequestEvent(nuxtApp = /* @__PURE__ */ useNuxtApp()) {
+  var _a;
+  return (_a = nuxtApp.ssrContext) == null ? void 0 : _a.event;
+}
+function useRequestFetch() {
+  var _a;
+  const event = (_a = (/* @__PURE__ */ useNuxtApp()).ssrContext) == null ? void 0 : _a.event;
+  return (event == null ? void 0 : event.$fetch) || globalThis.$fetch;
+}
+function useFetch(request, arg1, arg2) {
+  var _a;
+  const [opts = {}, autoKey] = typeof arg1 === "string" ? [{}, arg1] : [arg1, arg2];
+  const _request = computed(() => {
+    let r = request;
+    if (typeof r === "function") {
+      r = r();
+    }
+    return unref(r);
+  });
+  const _key = opts.key || hash([autoKey, ((_a = unref(opts.method)) == null ? void 0 : _a.toUpperCase()) || "GET", unref(opts.baseURL), typeof _request.value === "string" ? _request.value : "", unref(opts.params || opts.query)]);
+  if (!_key || typeof _key !== "string") {
+    throw new TypeError("[nuxt] [useFetch] key must be a string: " + _key);
+  }
+  if (!request) {
+    throw new Error("[nuxt] [useFetch] request is missing.");
+  }
+  const key = _key === autoKey ? "$f" + _key : _key;
+  if (!opts.baseURL && typeof _request.value === "string" && _request.value.startsWith("//")) {
+    throw new Error('[nuxt] [useFetch] the request URL must not start with "//".');
+  }
+  const {
+    server,
+    lazy,
+    default: defaultFn,
+    transform: transform2,
+    pick: pick2,
+    watch: watch2,
+    immediate,
+    ...fetchOptions
+  } = opts;
+  const _fetchOptions = reactive({
+    ...fetchOptions,
+    cache: typeof opts.cache === "boolean" ? void 0 : opts.cache
+  });
+  const _asyncDataOptions = {
+    server,
+    lazy,
+    default: defaultFn,
+    transform: transform2,
+    pick: pick2,
+    immediate,
+    watch: watch2 === false ? [] : [_fetchOptions, _request, ...watch2 || []]
+  };
+  let controller;
+  const asyncData = useAsyncData(key, () => {
+    var _a2;
+    (_a2 = controller == null ? void 0 : controller.abort) == null ? void 0 : _a2.call(controller);
+    controller = typeof AbortController !== "undefined" ? new AbortController() : {};
+    const isLocalFetch = typeof _request.value === "string" && _request.value.startsWith("/");
+    let _$fetch = opts.$fetch || globalThis.$fetch;
+    if (!opts.$fetch && isLocalFetch) {
+      _$fetch = useRequestFetch();
+    }
+    return _$fetch(_request.value, { signal: controller.signal, ..._fetchOptions });
+  }, _asyncDataOptions);
+  return asyncData;
+}
+function useLazyFetch(request, arg1, arg2) {
+  const [opts, autoKey] = typeof arg1 === "string" ? [{}, arg1] : [arg1, arg2];
+  return useFetch(
+    request,
+    {
+      ...opts,
+      lazy: true
+    },
+    // @ts-expect-error we pass an extra argument with the resolved auto-key to prevent another from being injected
+    autoKey
+  );
+}
+const CookieDefaults = {
+  path: "/",
+  watch: true,
+  decode: (val) => destr(decodeURIComponent(val)),
+  encode: (val) => encodeURIComponent(typeof val === "string" ? val : JSON.stringify(val))
+};
+function useCookie(name, _opts) {
+  var _a;
+  const opts = { ...CookieDefaults, ..._opts };
+  const cookies = readRawCookies(opts) || {};
+  const cookie = ref(cookies[name] ?? ((_a = opts.default) == null ? void 0 : _a.call(opts)));
+  {
+    const nuxtApp = /* @__PURE__ */ useNuxtApp();
+    const writeFinalCookieValue = () => {
+      if (!isEqual$1(cookie.value, cookies[name])) {
+        writeServerCookie(useRequestEvent(nuxtApp), name, cookie.value, opts);
+      }
+    };
+    const unhook = nuxtApp.hooks.hookOnce("app:rendered", writeFinalCookieValue);
+    nuxtApp.hooks.hookOnce("app:error", () => {
+      unhook();
+      return writeFinalCookieValue();
+    });
+  }
+  return cookie;
+}
+function readRawCookies(opts = {}) {
+  {
+    return parse(getRequestHeader(useRequestEvent(), "cookie") || "", opts);
+  }
+}
+function writeServerCookie(event, name, value, opts = {}) {
+  if (event) {
+    if (value !== null && value !== void 0) {
+      return setCookie(event, name, value, opts);
+    }
+    if (getCookie(event, name) !== void 0) {
+      return deleteCookie(event, name, opts);
+    }
+  }
+}
 const appLayoutTransition = false;
 const appPageTransition = false;
 const appKeepalive = false;
@@ -573,12 +856,52 @@ function executeAsync(function_) {
 }
 const _routes = [
   {
+    name: "admin-add_rights",
+    path: "/admin/add_rights",
+    meta: {},
+    alias: [],
+    redirect: void 0,
+    component: () => import('./_nuxt/add_rights-509ee0c4.mjs').then((m) => m.default || m)
+  },
+  {
+    name: "admin",
+    path: "/admin",
+    meta: {},
+    alias: [],
+    redirect: void 0,
+    component: () => import('./_nuxt/index-acf9fd44.mjs').then((m) => m.default || m)
+  },
+  {
+    name: "admin-logs",
+    path: "/admin/logs",
+    meta: {},
+    alias: [],
+    redirect: void 0,
+    component: () => import('./_nuxt/logs-ca5a4c8b.mjs').then((m) => m.default || m)
+  },
+  {
+    name: "admin-rights",
+    path: "/admin/rights",
+    meta: {},
+    alias: [],
+    redirect: void 0,
+    component: () => import('./_nuxt/rights-de720079.mjs').then((m) => m.default || m)
+  },
+  {
+    name: "category",
+    path: "/category",
+    meta: {},
+    alias: [],
+    redirect: void 0,
+    component: () => import('./_nuxt/index-90288384.mjs').then((m) => m.default || m)
+  },
+  {
     name: "index",
     path: "/",
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/index-97d5a2ca.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/index-c0387cdf.mjs').then((m) => m.default || m)
   },
   {
     name: "reset-password",
@@ -586,7 +909,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/index-eea8b331.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/index-c097455e.mjs').then((m) => m.default || m)
   },
   {
     name: "signup",
@@ -594,14 +917,14 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/index-d232bfbc.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/index-fdfc1977.mjs').then((m) => m.default || m)
   }
 ];
 const routerOptions0 = {
   scrollBehavior(to, from, savedPosition) {
     var _a;
     const nuxtApp = /* @__PURE__ */ useNuxtApp();
-    const behavior = ((_a = useRouter().options) == null ? void 0 : _a.scrollBehaviorType) ?? "auto";
+    const behavior = ((_a = useRouter$1().options) == null ? void 0 : _a.scrollBehaviorType) ?? "auto";
     let position = savedPosition || void 0;
     const routeAllowsScrollToTop = typeof to.meta.scrollToTop === "function" ? to.meta.scrollToTop(to, from) : to.meta.scrollToTop;
     if (!position && from && to && routeAllowsScrollToTop !== false && _isDifferentRoute(from, to)) {
@@ -652,7 +975,7 @@ const validate = /* @__PURE__ */ defineNuxtRouteMiddleware(async (to) => {
   if (!((_a = to.meta) == null ? void 0 : _a.validate)) {
     return;
   }
-  useRouter();
+  useRouter$1();
   const result = ([__temp, __restore] = executeAsync(() => Promise.resolve(to.meta.validate(to))), __temp = await __temp, __restore(), __temp);
   if (result === true) {
     return;
@@ -665,7 +988,7 @@ const globalMiddleware = [
   validate
 ];
 const namedMiddleware = {};
-const plugin = /* @__PURE__ */ defineNuxtPlugin({
+const plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
   name: "nuxt:router",
   enforce: "pre",
   async setup(nuxtApp) {
@@ -819,6 +1142,363 @@ const plugin = /* @__PURE__ */ defineNuxtPlugin({
     return { provide: { router } };
   }
 });
+const isVue2 = false;
+/*!
+ * pinia v2.1.7
+ * (c) 2023 Eduardo San Martin Morote
+ * @license MIT
+ */
+let activePinia;
+const setActivePinia = (pinia) => activePinia = pinia;
+const piniaSymbol = (
+  /* istanbul ignore next */
+  Symbol()
+);
+function isPlainObject(o) {
+  return o && typeof o === "object" && Object.prototype.toString.call(o) === "[object Object]" && typeof o.toJSON !== "function";
+}
+var MutationType;
+(function(MutationType2) {
+  MutationType2["direct"] = "direct";
+  MutationType2["patchObject"] = "patch object";
+  MutationType2["patchFunction"] = "patch function";
+})(MutationType || (MutationType = {}));
+function createPinia() {
+  const scope = effectScope(true);
+  const state = scope.run(() => ref({}));
+  let _p = [];
+  let toBeInstalled = [];
+  const pinia = markRaw({
+    install(app) {
+      setActivePinia(pinia);
+      {
+        pinia._a = app;
+        app.provide(piniaSymbol, pinia);
+        app.config.globalProperties.$pinia = pinia;
+        toBeInstalled.forEach((plugin2) => _p.push(plugin2));
+        toBeInstalled = [];
+      }
+    },
+    use(plugin2) {
+      if (!this._a && !isVue2) {
+        toBeInstalled.push(plugin2);
+      } else {
+        _p.push(plugin2);
+      }
+      return this;
+    },
+    _p,
+    // it's actually undefined here
+    // @ts-expect-error
+    _a: null,
+    _e: scope,
+    _s: /* @__PURE__ */ new Map(),
+    state
+  });
+  return pinia;
+}
+const noop = () => {
+};
+function addSubscription(subscriptions, callback, detached, onCleanup = noop) {
+  subscriptions.push(callback);
+  const removeSubscription = () => {
+    const idx = subscriptions.indexOf(callback);
+    if (idx > -1) {
+      subscriptions.splice(idx, 1);
+      onCleanup();
+    }
+  };
+  if (!detached && getCurrentScope()) {
+    onScopeDispose(removeSubscription);
+  }
+  return removeSubscription;
+}
+function triggerSubscriptions(subscriptions, ...args) {
+  subscriptions.slice().forEach((callback) => {
+    callback(...args);
+  });
+}
+const fallbackRunWithContext = (fn) => fn();
+function mergeReactiveObjects(target, patchToApply) {
+  if (target instanceof Map && patchToApply instanceof Map) {
+    patchToApply.forEach((value, key) => target.set(key, value));
+  }
+  if (target instanceof Set && patchToApply instanceof Set) {
+    patchToApply.forEach(target.add, target);
+  }
+  for (const key in patchToApply) {
+    if (!patchToApply.hasOwnProperty(key))
+      continue;
+    const subPatch = patchToApply[key];
+    const targetValue = target[key];
+    if (isPlainObject(targetValue) && isPlainObject(subPatch) && target.hasOwnProperty(key) && !isRef(subPatch) && !isReactive(subPatch)) {
+      target[key] = mergeReactiveObjects(targetValue, subPatch);
+    } else {
+      target[key] = subPatch;
+    }
+  }
+  return target;
+}
+const skipHydrateSymbol = (
+  /* istanbul ignore next */
+  Symbol()
+);
+function shouldHydrate(obj) {
+  return !isPlainObject(obj) || !obj.hasOwnProperty(skipHydrateSymbol);
+}
+const { assign } = Object;
+function isComputed(o) {
+  return !!(isRef(o) && o.effect);
+}
+function createOptionsStore(id, options, pinia, hot) {
+  const { state, actions, getters } = options;
+  const initialState = pinia.state.value[id];
+  let store;
+  function setup() {
+    if (!initialState && (!("production" !== "production") )) {
+      {
+        pinia.state.value[id] = state ? state() : {};
+      }
+    }
+    const localState = toRefs(pinia.state.value[id]);
+    return assign(localState, actions, Object.keys(getters || {}).reduce((computedGetters, name) => {
+      computedGetters[name] = markRaw(computed(() => {
+        setActivePinia(pinia);
+        const store2 = pinia._s.get(id);
+        return getters[name].call(store2, store2);
+      }));
+      return computedGetters;
+    }, {}));
+  }
+  store = createSetupStore(id, setup, options, pinia, hot, true);
+  return store;
+}
+function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) {
+  let scope;
+  const optionsForPlugin = assign({ actions: {} }, options);
+  const $subscribeOptions = {
+    deep: true
+    // flush: 'post',
+  };
+  let isListening;
+  let isSyncListening;
+  let subscriptions = [];
+  let actionSubscriptions = [];
+  let debuggerEvents;
+  const initialState = pinia.state.value[$id];
+  if (!isOptionsStore && !initialState && (!("production" !== "production") )) {
+    {
+      pinia.state.value[$id] = {};
+    }
+  }
+  ref({});
+  let activeListener;
+  function $patch(partialStateOrMutator) {
+    let subscriptionMutation;
+    isListening = isSyncListening = false;
+    if (typeof partialStateOrMutator === "function") {
+      partialStateOrMutator(pinia.state.value[$id]);
+      subscriptionMutation = {
+        type: MutationType.patchFunction,
+        storeId: $id,
+        events: debuggerEvents
+      };
+    } else {
+      mergeReactiveObjects(pinia.state.value[$id], partialStateOrMutator);
+      subscriptionMutation = {
+        type: MutationType.patchObject,
+        payload: partialStateOrMutator,
+        storeId: $id,
+        events: debuggerEvents
+      };
+    }
+    const myListenerId = activeListener = Symbol();
+    nextTick().then(() => {
+      if (activeListener === myListenerId) {
+        isListening = true;
+      }
+    });
+    isSyncListening = true;
+    triggerSubscriptions(subscriptions, subscriptionMutation, pinia.state.value[$id]);
+  }
+  const $reset = isOptionsStore ? function $reset2() {
+    const { state } = options;
+    const newState = state ? state() : {};
+    this.$patch(($state) => {
+      assign($state, newState);
+    });
+  } : (
+    /* istanbul ignore next */
+    noop
+  );
+  function $dispose() {
+    scope.stop();
+    subscriptions = [];
+    actionSubscriptions = [];
+    pinia._s.delete($id);
+  }
+  function wrapAction(name, action) {
+    return function() {
+      setActivePinia(pinia);
+      const args = Array.from(arguments);
+      const afterCallbackList = [];
+      const onErrorCallbackList = [];
+      function after(callback) {
+        afterCallbackList.push(callback);
+      }
+      function onError(callback) {
+        onErrorCallbackList.push(callback);
+      }
+      triggerSubscriptions(actionSubscriptions, {
+        args,
+        name,
+        store,
+        after,
+        onError
+      });
+      let ret;
+      try {
+        ret = action.apply(this && this.$id === $id ? this : store, args);
+      } catch (error) {
+        triggerSubscriptions(onErrorCallbackList, error);
+        throw error;
+      }
+      if (ret instanceof Promise) {
+        return ret.then((value) => {
+          triggerSubscriptions(afterCallbackList, value);
+          return value;
+        }).catch((error) => {
+          triggerSubscriptions(onErrorCallbackList, error);
+          return Promise.reject(error);
+        });
+      }
+      triggerSubscriptions(afterCallbackList, ret);
+      return ret;
+    };
+  }
+  const partialStore = {
+    _p: pinia,
+    // _s: scope,
+    $id,
+    $onAction: addSubscription.bind(null, actionSubscriptions),
+    $patch,
+    $reset,
+    $subscribe(callback, options2 = {}) {
+      const removeSubscription = addSubscription(subscriptions, callback, options2.detached, () => stopWatcher());
+      const stopWatcher = scope.run(() => watch(() => pinia.state.value[$id], (state) => {
+        if (options2.flush === "sync" ? isSyncListening : isListening) {
+          callback({
+            storeId: $id,
+            type: MutationType.direct,
+            events: debuggerEvents
+          }, state);
+        }
+      }, assign({}, $subscribeOptions, options2)));
+      return removeSubscription;
+    },
+    $dispose
+  };
+  const store = reactive(partialStore);
+  pinia._s.set($id, store);
+  const runWithContext = pinia._a && pinia._a.runWithContext || fallbackRunWithContext;
+  const setupStore = runWithContext(() => pinia._e.run(() => (scope = effectScope()).run(setup)));
+  for (const key in setupStore) {
+    const prop = setupStore[key];
+    if (isRef(prop) && !isComputed(prop) || isReactive(prop)) {
+      if (!isOptionsStore) {
+        if (initialState && shouldHydrate(prop)) {
+          if (isRef(prop)) {
+            prop.value = initialState[key];
+          } else {
+            mergeReactiveObjects(prop, initialState[key]);
+          }
+        }
+        {
+          pinia.state.value[$id][key] = prop;
+        }
+      }
+    } else if (typeof prop === "function") {
+      const actionValue = wrapAction(key, prop);
+      {
+        setupStore[key] = actionValue;
+      }
+      optionsForPlugin.actions[key] = prop;
+    } else ;
+  }
+  {
+    assign(store, setupStore);
+    assign(toRaw(store), setupStore);
+  }
+  Object.defineProperty(store, "$state", {
+    get: () => pinia.state.value[$id],
+    set: (state) => {
+      $patch(($state) => {
+        assign($state, state);
+      });
+    }
+  });
+  pinia._p.forEach((extender) => {
+    {
+      assign(store, scope.run(() => extender({
+        store,
+        app: pinia._a,
+        pinia,
+        options: optionsForPlugin
+      })));
+    }
+  });
+  if (initialState && isOptionsStore && options.hydrate) {
+    options.hydrate(store.$state, initialState);
+  }
+  isListening = true;
+  isSyncListening = true;
+  return store;
+}
+function defineStore(idOrOptions, setup, setupOptions) {
+  let id;
+  let options;
+  const isSetupStore = typeof setup === "function";
+  if (typeof idOrOptions === "string") {
+    id = idOrOptions;
+    options = isSetupStore ? setupOptions : setup;
+  } else {
+    options = idOrOptions;
+    id = idOrOptions.id;
+  }
+  function useStore(pinia, hot) {
+    const hasContext = hasInjectionContext();
+    pinia = // in test mode, ignore the argument provided as we can always retrieve a
+    // pinia instance with getActivePinia()
+    (pinia) || (hasContext ? inject$1(piniaSymbol, null) : null);
+    if (pinia)
+      setActivePinia(pinia);
+    pinia = activePinia;
+    if (!pinia._s.has(id)) {
+      if (isSetupStore) {
+        createSetupStore(id, setup, options, pinia);
+      } else {
+        createOptionsStore(id, options, pinia);
+      }
+    }
+    const store = pinia._s.get(id);
+    return store;
+  }
+  useStore.$id = id;
+  return useStore;
+}
+const plugin = /* @__PURE__ */ defineNuxtPlugin((nuxtApp) => {
+  const pinia = createPinia();
+  nuxtApp.vueApp.use(pinia);
+  setActivePinia(pinia);
+  {
+    nuxtApp.payload.pinia = pinia.state.value;
+  }
+  return {
+    provide: {
+      pinia
+    }
+  };
+});
 const reducers = {
   NuxtError: (data) => isNuxtError(data) && data.toJSON(),
   EmptyShallowRef: (data) => isRef(data) && isShallow(data) && !data.value && (typeof data.value === "bigint" ? "0n" : JSON.stringify(data.value) || "_"),
@@ -838,6 +1518,24 @@ const revive_payload_server_eJ33V7gbc6 = /* @__PURE__ */ defineNuxtPlugin({
 });
 const components_plugin_KR1HBZs4kY = /* @__PURE__ */ defineNuxtPlugin({
   name: "nuxt:global-components"
+});
+const init_grdyAU8lhf = /* @__PURE__ */ defineNuxtPlugin((app) => {
+  const init = async function() {
+    let tokenUser = useCookie("user_token");
+    let params = {
+      "user_token": tokenUser.value || v4()
+    };
+    const { data, status } = await useLazyFetch("http://localhost:8888//api/users", {
+      method: "GET",
+      query: params
+    }, "$d8g27GEO0f");
+    if (status.value != "error") {
+      tokenUser.value = tokenUser.value ? tokenUser.value : params.user_token;
+    }
+  };
+  app.vueApp.use(init);
+});
+const testApi_GMxoLUUCoT = /* @__PURE__ */ defineNuxtPlugin((app) => {
 });
 var NamesVuetifyAliases = /* @__PURE__ */ ((NamesVuetifyAliases2) => {
   NamesVuetifyAliases2["vTabsImg"] = "vTabsImg";
@@ -912,6 +1610,26 @@ function getObjectValueByPath(obj, path, fallback) {
   path = path.replace(/\[(\w+)\]/g, ".$1");
   path = path.replace(/^\./, "");
   return getNestedValue(obj, path.split("."), fallback);
+}
+function getPropertyFromItem(item, property, fallback) {
+  if (property === true)
+    return item === void 0 ? fallback : item;
+  if (property == null || typeof property === "boolean")
+    return fallback;
+  if (item !== Object(item)) {
+    if (typeof property !== "function")
+      return fallback;
+    const value2 = property(item, fallback);
+    return typeof value2 === "undefined" ? fallback : value2;
+  }
+  if (typeof property === "string")
+    return getObjectValueByPath(item, property, fallback);
+  if (Array.isArray(property))
+    return getNestedValue(item, property, fallback);
+  if (typeof property !== "function")
+    return fallback;
+  const value = property(item, fallback);
+  return typeof value === "undefined" ? fallback : value;
 }
 function createRange(length) {
   let start = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 0;
@@ -1102,6 +1820,35 @@ function focusableChildren(el) {
   const targets = ["button", "[href]", 'input:not([type="hidden"])', "select", "textarea", "[tabindex]"].map((s) => `${s}${filterByTabIndex ? ':not([tabindex="-1"])' : ""}:not([disabled])`).join(", ");
   return [...el.querySelectorAll(targets)];
 }
+function getNextElement(elements, location2, condition) {
+  let _el;
+  let idx = elements.indexOf(document.activeElement);
+  const inc = location2 === "next" ? 1 : -1;
+  do {
+    idx += inc;
+    _el = elements[idx];
+  } while ((!_el || _el.offsetParent == null || !((condition == null ? void 0 : condition(_el)) ?? true)) && idx < elements.length && idx >= 0);
+  return _el;
+}
+function focusChild(el, location2) {
+  var _a, _b, _c;
+  const focusable = focusableChildren(el);
+  if (!location2) {
+    if (el === document.activeElement || !el.contains(document.activeElement)) {
+      (_a = focusable[0]) == null ? void 0 : _a.focus();
+    }
+  } else if (location2 === "first") {
+    (_b = focusable[0]) == null ? void 0 : _b.focus();
+  } else if (location2 === "last") {
+    (_c = focusable.at(-1)) == null ? void 0 : _c.focus();
+  } else {
+    const _el = getNextElement(focusable, location2);
+    if (_el)
+      _el.focus();
+    else
+      focusChild(el, location2 === "next" ? "first" : "last");
+  }
+}
 const block = ["top", "bottom"];
 const inline = ["start", "end", "left", "right"];
 function parseAnchor(anchor, isRtl) {
@@ -1252,6 +1999,10 @@ function consoleWarn(message) {
 }
 function consoleError(message) {
   warn(`Vuetify error: ${message}`);
+}
+function deprecate(original, replacement) {
+  replacement = Array.isArray(replacement) ? replacement.slice(0, -1).map((s) => `'${s}'`).join(", ") + ` or '${replacement.at(-1)}'` : `'${replacement}'`;
+  warn(`[Vuetify UPGRADE] '${original}' is deprecated, use ${replacement} instead.`);
 }
 const delta = 0.20689655172413793;
 const cielabForwardTransform = (t) => t > delta ** 3 ? Math.cbrt(t) : t / (3 * delta ** 2) + 4 / 29;
@@ -3655,6 +4406,10 @@ function usePosition(props) {
     positionClasses
   };
 }
+function useRouter() {
+  var _a, _b;
+  return (_b = (_a = getCurrentInstance("useRouter")) == null ? void 0 : _a.proxy) == null ? void 0 : _b.$router;
+}
 function useLink(props, attrs) {
   const RouterLink = resolveDynamicComponent("RouterLink");
   const isLink = computed(() => !!(props.href || props.to));
@@ -5132,7 +5887,7 @@ const dark = {
   dark: true,
   colors: {
     background: twColors.slate[950],
-    surface: twColors.slate[900],
+    surface: "#FFFFFF",
     primary: twColors.indigo[500],
     secondary: twColors.purple[500],
     error: twColors.red[500],
@@ -5146,7 +5901,7 @@ const primaryTheme = {
   dark: false,
   colors: {
     background: twColors.indigo[50],
-    surface: twColors.lime[900],
+    surface: "#FFFFFF",
     primary: twColors.orange[500],
     secondary: twColors.orange[700],
     error: twColors.red[700],
@@ -5728,9 +6483,12 @@ const vuetify_7h9QAQEssH = /* @__PURE__ */ defineNuxtPlugin((app) => {
 });
 const plugins = [
   unhead_KgADcZ0jPj,
+  plugin$1,
   plugin,
   revive_payload_server_eJ33V7gbc6,
   components_plugin_KR1HBZs4kY,
+  init_grdyAU8lhf,
+  testApi_GMxoLUUCoT,
   vuetify_7h9QAQEssH
 ];
 const _wrapIf = (component, props, slots) => {
@@ -5741,7 +6499,7 @@ const _wrapIf = (component, props, slots) => {
   } };
 };
 const layouts = {
-  default: () => import('./_nuxt/default-b31f9851.mjs').then((m) => m.default || m)
+  default: () => import('./_nuxt/default-f803fc56.mjs').then((m) => m.default || m)
 };
 const LayoutLoader = /* @__PURE__ */ defineComponent$1({
   name: "LayoutLoader",
@@ -6022,8 +6780,8 @@ const _sfc_main$1 = {
     const statusMessage = _error.statusMessage ?? (is404 ? "Page Not Found" : "Internal Server Error");
     const description = _error.message || _error.toString();
     const stack = void 0;
-    const _Error404 = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/error-404-ea3a5b19.mjs').then((r) => r.default || r));
-    const _Error = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/error-500-7c9ed7c2.mjs').then((r) => r.default || r));
+    const _Error404 = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/error-404-baae416d.mjs').then((r) => r.default || r));
+    const _Error = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/error-500-c1771bc9.mjs').then((r) => r.default || r));
     const ErrorTemplate = is404 ? _Error404 : _Error;
     return (_ctx, _push, _parent, _attrs) => {
       _push(ssrRenderComponent(unref(ErrorTemplate), mergeProps({ statusCode: unref(statusCode), statusMessage: unref(statusMessage), description: unref(description), stack: unref(stack) }, _attrs), null, _parent));
@@ -6041,7 +6799,7 @@ const _sfc_main = {
   __name: "nuxt-root",
   __ssrInlineRender: true,
   setup(__props) {
-    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/island-renderer-32021951.mjs').then((r) => r.default || r));
+    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/island-renderer-b745345a.mjs').then((r) => r.default || r));
     const nuxtApp = /* @__PURE__ */ useNuxtApp();
     nuxtApp.deferHydration();
     nuxtApp.ssrContext.url;
@@ -6108,5 +6866,5 @@ let entry;
 }
 const entry$1 = (ctx) => entry(ctx);
 
-export { useBackgroundColor as $, useBorder as A, useDimension as B, useElevation as C, useLoader as D, useLocation as E, usePosition as F, useLink as G, useProxiedModel as H, IconValue as I, VTab as J, VBtn as K, LoaderSlot as L, injectHead as M, resolveUnrefHeadInput as N, useLocale as O, VSlideYTransition as P, wrapInArray as Q, Ripple as R, useTextColor as S, getCurrentInstanceName as T, EventProp as U, VIcon as V, consoleWarn as W, getUid as X, useToggleScope as Y, useRtl as Z, _export_sfc as _, makeDensityProps as a, nullifyTransforms as a0, convertToUnit as a1, animate as a2, VExpandXTransition as a3, isOn as a4, pick as a5, standardEasing as a6, filterInputAttrs as a7, callEvent as a8, useRouter as a9, navigateTo as aa, breakpoints as ab, useResizeObserver as ac, getCurrentInstance as ad, findChildrenWithProvide as ae, VExpandTransition as af, clamp as ag, SUPPORTS_INTERSECTION as ah, makeRoundedProps as b, createError as c, makeSizeProps as d, entry$1 as default, makeTagProps as e, makeThemeProps as f, genericComponent as g, makeVariantProps as h, provideTheme as i, useDensity as j, useRounded as k, useSize as l, makeComponentProps as m, useRender as n, genOverlays as o, propsFactory as p, provideDefaults as q, VDefaultsProvider as r, makeBorderProps as s, makeDimensionProps as t, useVariant as u, makeElevationProps as v, makeLoaderProps as w, makeLocationProps as x, makePositionProps as y, makeRouterProps as z };
+export { makeRouterProps as $, makePositionProps as A, makeRoundedProps as B, makeVariantProps as C, useProxiedModel as D, useVariant as E, useElevation as F, useLocation as G, usePosition as H, IconValue as I, useRounded as J, useTextColor as K, useLocale as L, genOverlays as M, VIcon as N, VDefaultsProvider as O, useResizeObserver as P, useDisplay as Q, createRange as R, SUPPORTS_INTERSECTION as S, clamp as T, getCurrentInstance as U, VBtn as V, useToggleScope as W, provideDefaults as X, makeBorderProps as Y, makeLoaderProps as Z, _export_sfc as _, makeDensityProps as a, Ripple as a0, useBorder as a1, useLoader as a2, useLink as a3, LoaderSlot as a4, breakpoints as a5, getUid as a6, VExpandTransition as a7, defineComponent as a8, EventProp as a9, deprecate as aa, deepEqual as ab, useBackgroundColor as ac, focusChild as ad, getPropertyFromItem as ae, pick as af, makeSizeProps as ag, useSize as ah, VSlideYTransition as ai, wrapInArray as aj, getCurrentInstanceName as ak, consoleWarn as al, nullifyTransforms as am, animate as an, VExpandXTransition as ao, isOn as ap, standardEasing as aq, filterInputAttrs as ar, callEvent as as, findChildrenWithProvide as at, useRouter as au, toPhysical as av, VFadeTransition as aw, makeTagProps as b, createError as c, makeThemeProps as d, entry$1 as default, provideTheme as e, useRender as f, genericComponent as g, convertToUnit as h, useRuntimeConfig as i, VProgressCircular as j, useRouter$1 as k, injectHead as l, makeComponentProps as m, navigateTo as n, defineStore as o, propsFactory as p, useRtl as q, resolveUnrefHeadInput as r, makeDimensionProps as s, useDimension as t, useDensity as u, useCookie as v, useFetch as w, useAsyncData as x, makeElevationProps as y, makeLocationProps as z };
 //# sourceMappingURL=server.mjs.map

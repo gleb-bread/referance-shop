@@ -37,17 +37,6 @@ function defineRenderHandler(handler) {
   });
 }
 
-function buildAssetsDir() {
-  return useRuntimeConfig().app.buildAssetsDir;
-}
-function buildAssetsURL(...path) {
-  return joinURL(publicAssetsURL(), buildAssetsDir(), ...path);
-}
-function publicAssetsURL(...path) {
-  const publicBase = useRuntimeConfig().app.cdnURL || useRuntimeConfig().app.baseURL;
-  return path.length ? joinURL(publicBase, ...path) : publicBase;
-}
-
 const Vue3 = version.startsWith("3");
 
 function resolveUnref(r) {
@@ -104,11 +93,22 @@ function createServerHead(options = {}) {
 
 const unheadPlugins = [];
 
-const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"},{"hid":"description","name":"description","content":"Template to get you up and running with Nuxt 3 & Vuetify 3"},{"property":"og:site_name","content":"Vuetify 3 + Nuxt 3 Starter"},{"hid":"og:type","property":"og:type","content":"website"},{"hid":"og:url","property":"og:url","content":"https://vuetify3nuxt3starter.behonbaker.com/"},{"hid":"og:image:secure_url","property":"og:image:secure_url","content":"https://vuetify3nuxt3starter.behonbaker.com/starter.png"},{"hid":"og:title","property":"og:title","content":"Vuetify 3 + Nuxt 3 Starter"},{"hid":"og:description","property":"og:description","content":"Template to get you up and running with Nuxt 3 & Vuetify 3"},{"hid":"og:image","property":"og:image","content":"https://vuetify3nuxt3starter.behonbaker.com/starter.png"},{"name":"twitter:card","content":"summary_large_image"},{"hid":"twitter:url","name":"twitter:url","content":"https://vuetify3nuxt3starter.behonbaker.com/"},{"hid":"twitter:title","name":"twitter:title","content":"Vuetify 3 + Nuxt 3 Starter"},{"hid":"twitter:description","name":"twitter:description","content":"Template to get you up and running with Nuxt 3 & Vuetify 3"},{"hid":"twitter:image","name":"twitter:image","content":"https://vuetify3nuxt3starter.behonbaker.com/starter.png"},{"name":"mobile-web-app-capable","content":"yes","key":"mobile-web-app-capable"},{"name":"apple-mobile-web-app-title","content":"CoffeX","key":"apple-mobile-web-app-title"},{"name":"author","content":"Behon Baker","key":"author"},{"name":"description","content":"Template to get you up and running with Nuxt 3 & Vuetify 3","key":"description"},{"name":"theme-color","content":"#4f46e5","key":"theme-color"},{"property":"og:type","content":"website","key":"og:type"},{"property":"og:title","content":"CoffeX","key":"og:title"},{"property":"og:site_name","content":"CoffeX","key":"og:site_name"},{"property":"og:description","content":"Template to get you up and running with Nuxt 3 & Vuetify 3","key":"og:description"},{"name":"twitter:card","content":"summary","key":"twitter:card"}],"link":[{"rel":"stylesheet","href":"https://rsms.me/inter/inter.css"},{"rel":"preconnect","href":"https://rsms.me/"},{"rel":"icon","type":"image/x-icon","href":"favicon.ico"},{"rel":"canonical","href":"https://vuetify3nuxt3starter.behonbaker.com/"},{"rel":"icon","href":"/_nuxt/icons/64x64.be4cdee5.png","key":"favicon"},{"rel":"apple-touch-icon","href":"/_nuxt/icons/512x512.maskable.be4cdee5.png","sizes":"512x512","key":"favicon-apple"},{"rel":"manifest","href":"/manifest.json"}],"style":[],"script":[],"noscript":[],"titleTemplate":"%s | СoffeX","title":"CoffeX","htmlAttrs":{"lang":"en"}};
+const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"},{"hid":"description","name":"description","content":"Template to get you up and running with Nuxt 3 & Vuetify 3"},{"property":"og:site_name","content":"Vuetify 3 + Nuxt 3 Starter"},{"hid":"og:type","property":"og:type","content":"website"},{"hid":"og:url","property":"og:url","content":"https://vuetify3nuxt3starter.behonbaker.com/"},{"hid":"og:image:secure_url","property":"og:image:secure_url","content":"https://vuetify3nuxt3starter.behonbaker.com/starter.png"},{"hid":"og:title","property":"og:title","content":"Vuetify 3 + Nuxt 3 Starter"},{"hid":"og:description","property":"og:description","content":"Template to get you up and running with Nuxt 3 & Vuetify 3"},{"hid":"og:image","property":"og:image","content":"https://vuetify3nuxt3starter.behonbaker.com/starter.png"},{"name":"twitter:card","content":"summary_large_image"},{"hid":"twitter:url","name":"twitter:url","content":"https://vuetify3nuxt3starter.behonbaker.com/"},{"hid":"twitter:title","name":"twitter:title","content":"Vuetify 3 + Nuxt 3 Starter"},{"hid":"twitter:description","name":"twitter:description","content":"Template to get you up and running with Nuxt 3 & Vuetify 3"},{"hid":"twitter:image","name":"twitter:image","content":"https://vuetify3nuxt3starter.behonbaker.com/starter.png"},{"name":"mobile-web-app-capable","content":"yes"},{"hid":"apple-mobile-web-app-title","name":"apple-mobile-web-app-title","content":"CoffeX"},{"name":"author","content":"Behon Baker"},{"name":"description","content":"Template to get you up and running with Nuxt 3 & Vuetify 3"},{"name":"theme-color","content":"#4f46e5"},{"property":"og:type","content":"website"},{"property":"og:title","content":"CoffeX"},{"property":"og:site_name","content":"CoffeX"},{"property":"og:description","content":"Template to get you up and running with Nuxt 3 & Vuetify 3"}],"link":[{"rel":"stylesheet","href":"https://rsms.me/inter/inter.css"},{"rel":"preconnect","href":"https://rsms.me/"},{"rel":"icon","type":"image/x-icon","href":"favicon.ico"},{"rel":"canonical","href":"https://vuetify3nuxt3starter.behonbaker.com/"},{"rel":"shortcut icon","href":"/icon.png"},{"rel":"apple-touch-icon","href":"/icon.png","sizes":"512x512"},{"rel":"manifest","href":"/manifest.json"}],"style":[],"script":[],"noscript":[],"titleTemplate":"%s | СoffeX","title":"CoffeX","htmlAttrs":{"lang":"en"}};
 
 const appRootId = "__nuxt";
 
 const appRootTag = "div";
+
+function buildAssetsDir() {
+  return useRuntimeConfig().app.buildAssetsDir;
+}
+function buildAssetsURL(...path) {
+  return joinURL(publicAssetsURL(), buildAssetsDir(), ...path);
+}
+function publicAssetsURL(...path) {
+  const publicBase = useRuntimeConfig().app.cdnURL || useRuntimeConfig().app.baseURL;
+  return path.length ? joinURL(publicBase, ...path) : publicBase;
+}
 
 globalThis.__buildAssetsURL = buildAssetsURL;
 globalThis.__publicAssetsURL = publicAssetsURL;

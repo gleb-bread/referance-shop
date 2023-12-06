@@ -1,6 +1,4 @@
-const options = {"autoRegister":true,"cacheOptions":{"directoryIndex":"/","revision":"T7cRmCNqG8kb"},"enabled":true,"preCaching":[],"templatePath":null,"workboxVersion":"6.5.3","workboxUrl":"https://storage.googleapis.com/workbox-cdn/releases/6.5.3/workbox-sw.js"}
-
-importScripts(options.workboxUrl)
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.3/workbox-sw.js')
 
 self.addEventListener('install', () => self.skipWaiting())
 self.addEventListener('activate', () => self.clients.claim())
@@ -9,7 +7,6 @@ const { registerRoute } = workbox.routing
 const { NetworkFirst, StaleWhileRevalidate, CacheFirst } = workbox.strategies
 const { CacheableResponsePlugin } = workbox.cacheableResponse
 const { ExpirationPlugin } = workbox.expiration
-const { precacheAndRoute } = workbox.precaching
 
 // Cache page navigations (html) with a Network First strategy
 registerRoute(
@@ -24,10 +21,9 @@ registerRoute(
   })
 )
 
-// Cache Web Manifest, CSS, JS, and Web Worker requests with a Stale While Revalidate strategy
+// Cache CSS, JS, and Web Worker requests with a Stale While Revalidate strategy
 registerRoute(
   ({ request }) =>
-    request.destination === 'manifest' ||
     request.destination === 'style' ||
     request.destination === 'script' ||
     request.destination === 'worker',
@@ -51,8 +47,3 @@ registerRoute(
     ]
   })
 )
-
-// Precaching
-if (options.preCaching.length) {
-  precacheAndRoute(options.preCaching, options.cacheOptions)
-}
