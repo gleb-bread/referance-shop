@@ -1,6 +1,8 @@
 export interface MenuState {
     menuShow: boolean,
     menuTitle: string,
+    subcategoriesShow: boolean,
+    currectCategory: string | false,
 }
 
 export interface ParserProductsState {

@@ -1,5 +1,6 @@
 <template>
     <v-card
+        @click.stop="handlerClickCategory(categoryTitle)"
         @mouseover.stop="isHover = true"
         @mouseleave.stop="isHover = false"
         class="pa-0 h-100 d-flex flex-column"
@@ -61,11 +62,15 @@ export default defineComponent({
     data() {
         return {
             isHover: false,
+            menuStore: useMenuStore(),
         };
     },
     
     methods: {
-        
+        handlerClickCategory(category: string){
+            
+            this.menuStore.setCurrectCategory(this.menuStore, category);
+        }
     },
     
     components: {

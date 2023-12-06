@@ -7,5 +7,13 @@ export const getters = {
     
     getMenuTitle(state: MenuState){
         return state.menuTitle;
+    },
+
+    getSubcategoriesShow(state: MenuState){
+        return state.subcategoriesShow;
+    },
+
+    getCurrectCategory(state: MenuState){
+        return state.currectCategory;
     }
 }

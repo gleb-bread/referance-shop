@@ -56,7 +56,7 @@ export default defineComponent({
     return {
       currectTab: '',
       menuStore: useMenuStore(),
-      parsingProducts: useParserProductsStore(),
+      parsingProducts:  useParserProductsStore(),
     };
   },
   

@@ -5,6 +5,8 @@
 		<v-main>
 			<header-menu>
 			</header-menu>
+			<header-subtitles>
+			</header-subtitles>
 			<slot></slot>
 		</v-main>
 	</v-app>

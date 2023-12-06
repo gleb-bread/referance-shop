@@ -38,6 +38,7 @@ export default defineComponent({
     
     methods: {
         handlerClickMenu(){
+            this.menuStore.setSubcategoriesShowShow(this.menuStore, false);
             this.menuStore.setMenuShow(this.menuStore, !this.menuStore.getMenuShow);
         }
     },
