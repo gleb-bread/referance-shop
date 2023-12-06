@@ -11,6 +11,15 @@
         <v-app-bar-title>
             {{ getTitle }} 
         </v-app-bar-title>
+        <template v-slot:append>
+        <v-fade-transition>
+            <v-btn 
+                v-if="(typeof menuStore.getCurrectCategory != 'boolean')"
+                icon="mdi-dots-vertical"
+                @click.stop="handlerClickSubcategoryList">
+            </v-btn>
+        </v-fade-transition>
+        </template>
     </v-app-bar>
 </template>
 
@@ -38,8 +47,11 @@ export default defineComponent({
     
     methods: {
         handlerClickMenu(){
-            this.menuStore.setSubcategoriesShowShow(this.menuStore, false);
             this.menuStore.setMenuShow(this.menuStore, !this.menuStore.getMenuShow);
+        },
+
+        handlerClickSubcategoryList(){
+            this.menuStore.setSubcategoriesShow(this.menuStore, !this.menuStore.getSubcategoriesShow);
         }
     },
 

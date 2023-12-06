@@ -9,8 +9,16 @@ export const getters = {
         return state.menuTitle;
     },
 
+    getPageType(state: MenuState){
+        return state.pageNow;
+    },
+
     getSubcategoriesShow(state: MenuState){
         return state.subcategoriesShow;
+    },
+
+    getCurrectSubcategory(state: MenuState){
+        return state.currectSubcategory;
     },
 
     getCurrectCategory(state: MenuState){

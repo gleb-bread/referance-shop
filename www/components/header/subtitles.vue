@@ -1,13 +1,20 @@
 <template>
     <v-navigation-drawer
-        v-if="getCurrectCategory != false"
+        location="right"
+        v-if="(typeof getCurrectCategory != 'boolean')"
         color="secondary"
         v-model="getSubcategoriesShow">
         <v-list>
-            <v-list-item
-                v-for="item in parserProducts.getParserCategories[getCurrectCategory]"
-                :title="item">
-            </v-list-item>
+            <v-fade-transition group>
+                <v-list-item
+                    link
+                    v-for="(item, index) in parserProducts.getParserCategories[getCurrectCategory]"
+                    :key="item + '.' + index"
+                    :title="item ? item : 'Другое'"
+                    @click.stop="handlerClickAtSubcategory(item)"
+                    :active="Boolean(menuStore.getCurrectSubcategory === item)">
+                </v-list-item>
+            </v-fade-transition>
         </v-list>
     </v-navigation-drawer>
 </template>
@@ -26,16 +33,19 @@ export default defineComponent({
     computed: {
         getSubcategoriesShow: {
             get(){
-                console.log(this.menuStore.getSubcategoriesShow);
                 return this.menuStore.getSubcategoriesShow;
             },
             set(flag: boolean){
-                this.menuStore.setMenuShow(this.menuStore, flag);
+                this.menuStore.setSubcategoriesShow(this.menuStore, flag);
             }
         },
 
         getCurrectCategory(){
-            return this.menuStore.getCurrectCategory;
+            if(this.menuStore.getCurrectCategory === 'Другое'){
+                return '';
+            } else {
+                return this.menuStore.getCurrectCategory;
+            }
         }
     },
     
@@ -47,7 +57,9 @@ export default defineComponent({
     },
     
     methods: {
-        
+        handlerClickAtSubcategory(str: string){
+            this.menuStore.setCurrectSubcategory(this.menuStore, str);
+        }
     },
     
     components: {

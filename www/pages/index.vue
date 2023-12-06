@@ -49,6 +49,10 @@ export default defineComponent({
 
     getImagesCategories(){
       return this.parsingProducts.getParserImageCategories;
+    },
+
+    getTitle(){
+      return this.getCurrectCategory(this.menuStore.getCurrectCategory) || 'Каталог';
     }
   },
   
@@ -61,7 +65,13 @@ export default defineComponent({
   },
   
   methods: {
-    
+    getCurrectCategory(category: string | false){
+      if(typeof category != 'boolean'){
+        return category ? category : 'Другое';
+      } else {
+        return category;
+      }
+    }
   },
   
   components: {
@@ -74,7 +84,13 @@ export default defineComponent({
   },
 
   mounted(){
-    this.menuStore.setMenuTitle(this.menuStore, 'Главная страница');
+    this.menuStore.setMenuTitle(this.menuStore, this.getTitle);
+  },
+
+  watch: {
+    getTitle: function(newVal: string){
+      this.menuStore.setMenuTitle(this.menuStore, newVal);
+    }
   }
 
 });

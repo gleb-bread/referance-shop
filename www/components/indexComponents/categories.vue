@@ -9,6 +9,7 @@
                     :cols="currectCell.size"
                     v-for="categoryKey in item">
                     <category-item
+                        @click.stop="$nuxt.$router.replace({path: '/category'})"
                         :category-img="getImageCategories[categoryKey]"
                         :category-title="categoryKey">
                     </category-item>

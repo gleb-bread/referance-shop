@@ -8,9 +8,11 @@ export default defineNuxtPlugin((app) => {
     //     let tokenUser = useCookie('user_token');
 
     //     let params = {
+    //         page: 1,
+    //         category: 'Обои и настенные покрытия'
     //     };
 
-    //     const {data, error} = await fetchRequest('api/parser_products/images', { 
+    //     const {data, error} = await fetchRequest('api/parser_products', { 
     //         method: 'GET',
     //         query: params,
     //     });

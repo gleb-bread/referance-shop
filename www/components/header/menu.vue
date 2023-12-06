@@ -8,6 +8,7 @@
                 v-for="item in itemMenuList"
                 :title="item.title"
                 :prepend-icon="item.prependIcon"
+                @click.stop="item.handlerClick(menuStore)"
                 :to="item.link">
             </v-list-item>
             <v-list-group
@@ -64,6 +65,9 @@ export default defineComponent({
                     title: 'Главная',
                     link: '/',
                     prependIcon: 'mdi-home-variant',
+                    handlerClick: function(context: any) {
+                        context.setCurrectCategory(context, false);
+                    },
                 },
             ],
 

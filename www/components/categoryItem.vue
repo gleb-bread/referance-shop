@@ -68,8 +68,11 @@ export default defineComponent({
     
     methods: {
         handlerClickCategory(category: string){
-            
-            this.menuStore.setCurrectCategory(this.menuStore, category);
+            this.menuStore.setCurrectCategory(this.menuStore, category, true);
+        },
+
+        handlerDbClickCategory(category: string){
+            this.menuStore.setCurrectCategory(this.menuStore, category, false);
         }
     },
     

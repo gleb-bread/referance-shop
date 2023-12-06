@@ -1,9 +1,13 @@
 export interface MenuState {
     menuShow: boolean,
     menuTitle: string,
+    pageNow: PagesList,
     subcategoriesShow: boolean,
     currectCategory: string | false,
+    currectSubcategory: string | false,
 }
+
+export type PagesList = 'index' | 'admin' | '';
 
 export interface ParserProductsState {
     products: ParserProductsType[],
@@ -13,6 +17,12 @@ export interface ParserProductsState {
     update: boolean,
     errorLoading: boolean,
     errorUpdate: boolean,
+}
+
+export type ParserProductsFilter = {
+    page: number,
+    category: string,
+    subcategory: string,
 }
 
 

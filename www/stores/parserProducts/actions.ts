@@ -1,17 +1,20 @@
-import { ParserProductsState, ParserProductsType, ParserProductsFirstJSONParse } from "../types";
+import { ParserProductsState, ParserProductsType, ParserProductsFirstJSONParse, ParserProductsFilter } from "../types";
 import { fetchRequest } from "../primary";
 
 export const actions = {
-
-    async setParserProducts(context: ParserProductsState, page: number = 1){
+    //TODO разделить логические блоки кода на функции
+    async setParserProducts(context: ParserProductsState, params:ParserProductsFilter = {page: 1} as ParserProductsFilter){
         context.loading = true;
-        const data = await fetchRequest(`api/parser_products`,{
-            method: 'GET',
-            query: {
-                page: page,
-            }
-        });
 
+        const { data } = useAsyncData('parsingProducts', async () =>{
+            await $fetch(`api/parser_products`,{
+                method: 'GET',
+                query: params,
+            });   
+        }) 
+
+        console.log(data);
+        
         if(data.value){
             let defaultData = getJSONPasrsingObject(data.value as unknown as string);
             context.products = defaultData;
