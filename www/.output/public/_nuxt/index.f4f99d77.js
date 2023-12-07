@@ -1,0 +1,1 @@
+import{q as e,_ as t}from"./entry.923c65f1.js";const n=e({props:{},emits:{},computed:{},data(){return{}},methods:{},created(){this.$nuxt.$router.replace({path:"/admin/logs"})},components:{}});function o(r,s,a,p,c,d){return null}const m=t(n,[["render",o]]);export{m as default};

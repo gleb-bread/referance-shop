@@ -664,18 +664,6 @@ function useFetch(request, arg1, arg2) {
   }, _asyncDataOptions);
   return asyncData;
 }
-function useLazyFetch(request, arg1, arg2) {
-  const [opts, autoKey] = typeof arg1 === "string" ? [{}, arg1] : [arg1, arg2];
-  return useFetch(
-    request,
-    {
-      ...opts,
-      lazy: true
-    },
-    // @ts-expect-error we pass an extra argument with the resolved auto-key to prevent another from being injected
-    autoKey
-  );
-}
 const CookieDefaults = {
   path: "/",
   watch: true,
@@ -893,7 +881,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/index-90288384.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/index-deed5a4b.mjs').then((m) => m.default || m)
   },
   {
     name: "index",
@@ -901,7 +889,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/index-c0387cdf.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/index-4ec4c64d.mjs').then((m) => m.default || m)
   },
   {
     name: "reset-password",
@@ -909,7 +897,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/index-c097455e.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/index-d5c2b76e.mjs').then((m) => m.default || m)
   },
   {
     name: "signup",
@@ -917,7 +905,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/index-fdfc1977.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/index-5108cd37.mjs').then((m) => m.default || m)
   }
 ];
 const routerOptions0 = {
@@ -1519,19 +1507,42 @@ const revive_payload_server_eJ33V7gbc6 = /* @__PURE__ */ defineNuxtPlugin({
 const components_plugin_KR1HBZs4kY = /* @__PURE__ */ defineNuxtPlugin({
   name: "nuxt:global-components"
 });
+const GlobalVars = {
+  sait: "http://glebhe0h.beget.tech/"
+};
 const init_grdyAU8lhf = /* @__PURE__ */ defineNuxtPlugin((app) => {
   const init = async function() {
-    let tokenUser = useCookie("user_token");
+    let tokenUser = useCookie("user_token", {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: true ,
+      maxAge: 36e4
+    });
     let params = {
       "user_token": tokenUser.value || v4()
     };
-    const { data, status } = await useLazyFetch("http://localhost:8888//api/users", {
+    const data = await fetchRequest("api/users", {
       method: "GET",
       query: params
-    }, "$d8g27GEO0f");
-    if (status.value != "error") {
+    });
+    if (data.value) {
       tokenUser.value = tokenUser.value ? tokenUser.value : params.user_token;
     }
+    console.log(tokenUser.value);
+  };
+  const fetchRequest = async function(url, opts) {
+    let mainSait = GlobalVars.sait;
+    if (mainSait[mainSait.length - 1] != "/")
+      mainSait = mainSait + "/";
+    if (url[url.length - 1] == "/")
+      url = url.substring(0, url.length - 1);
+    opts = { ...opts, ...{
+      query: {
+        ...opts.query
+      }
+    } };
+    const { data, error } = await useFetch(`${mainSait}${url}`, opts, "$d8g27GEO0f");
+    return data;
   };
   app.vueApp.use(init);
 });
@@ -6499,7 +6510,7 @@ const _wrapIf = (component, props, slots) => {
   } };
 };
 const layouts = {
-  default: () => import('./_nuxt/default-f803fc56.mjs').then((m) => m.default || m)
+  default: () => import('./_nuxt/default-b8644ecf.mjs').then((m) => m.default || m)
 };
 const LayoutLoader = /* @__PURE__ */ defineComponent$1({
   name: "LayoutLoader",
@@ -6866,5 +6877,5 @@ let entry;
 }
 const entry$1 = (ctx) => entry(ctx);
 
-export { makeRouterProps as $, makePositionProps as A, makeRoundedProps as B, makeVariantProps as C, useProxiedModel as D, useVariant as E, useElevation as F, useLocation as G, usePosition as H, IconValue as I, useRounded as J, useTextColor as K, useLocale as L, genOverlays as M, VIcon as N, VDefaultsProvider as O, useResizeObserver as P, useDisplay as Q, createRange as R, SUPPORTS_INTERSECTION as S, clamp as T, getCurrentInstance as U, VBtn as V, useToggleScope as W, provideDefaults as X, makeBorderProps as Y, makeLoaderProps as Z, _export_sfc as _, makeDensityProps as a, Ripple as a0, useBorder as a1, useLoader as a2, useLink as a3, LoaderSlot as a4, breakpoints as a5, getUid as a6, VExpandTransition as a7, defineComponent as a8, EventProp as a9, deprecate as aa, deepEqual as ab, useBackgroundColor as ac, focusChild as ad, getPropertyFromItem as ae, pick as af, makeSizeProps as ag, useSize as ah, VSlideYTransition as ai, wrapInArray as aj, getCurrentInstanceName as ak, consoleWarn as al, nullifyTransforms as am, animate as an, VExpandXTransition as ao, isOn as ap, standardEasing as aq, filterInputAttrs as ar, callEvent as as, findChildrenWithProvide as at, useRouter as au, toPhysical as av, VFadeTransition as aw, makeTagProps as b, createError as c, makeThemeProps as d, entry$1 as default, provideTheme as e, useRender as f, genericComponent as g, convertToUnit as h, useRuntimeConfig as i, VProgressCircular as j, useRouter$1 as k, injectHead as l, makeComponentProps as m, navigateTo as n, defineStore as o, propsFactory as p, useRtl as q, resolveUnrefHeadInput as r, makeDimensionProps as s, useDimension as t, useDensity as u, useCookie as v, useFetch as w, useAsyncData as x, makeElevationProps as y, makeLocationProps as z };
+export { makeLoaderProps as $, makePositionProps as A, makeRoundedProps as B, makeVariantProps as C, useProxiedModel as D, useVariant as E, useElevation as F, GlobalVars as G, useLocation as H, IconValue as I, usePosition as J, useRounded as K, useTextColor as L, useLocale as M, genOverlays as N, VIcon as O, VDefaultsProvider as P, useResizeObserver as Q, useDisplay as R, SUPPORTS_INTERSECTION as S, createRange as T, clamp as U, VBtn as V, getCurrentInstance as W, useToggleScope as X, provideDefaults as Y, makeBorderProps as Z, _export_sfc as _, makeDensityProps as a, makeRouterProps as a0, Ripple as a1, useBorder as a2, useLoader as a3, useLink as a4, LoaderSlot as a5, breakpoints as a6, getUid as a7, VExpandTransition as a8, defineComponent as a9, EventProp as aa, deprecate as ab, deepEqual as ac, useBackgroundColor as ad, focusChild as ae, getPropertyFromItem as af, pick as ag, makeSizeProps as ah, useSize as ai, VSlideYTransition as aj, wrapInArray as ak, getCurrentInstanceName as al, consoleWarn as am, nullifyTransforms as an, animate as ao, VExpandXTransition as ap, isOn as aq, standardEasing as ar, filterInputAttrs as as, callEvent as at, findChildrenWithProvide as au, useRouter as av, toPhysical as aw, VFadeTransition as ax, makeTagProps as b, createError as c, makeThemeProps as d, entry$1 as default, provideTheme as e, useRender as f, genericComponent as g, convertToUnit as h, useRuntimeConfig as i, VProgressCircular as j, useRouter$1 as k, injectHead as l, makeComponentProps as m, navigateTo as n, defineStore as o, propsFactory as p, useRtl as q, resolveUnrefHeadInput as r, makeDimensionProps as s, useDimension as t, useDensity as u, useCookie as v, useFetch as w, useAsyncData as x, makeElevationProps as y, makeLocationProps as z };
 //# sourceMappingURL=server.mjs.map

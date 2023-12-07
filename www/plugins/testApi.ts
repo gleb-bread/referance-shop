@@ -12,7 +12,7 @@ export default defineNuxtPlugin((app) => {
     //         category: 'Обои и настенные покрытия'
     //     };
 
-    //     const {data, error} = await fetchRequest('api/parser_products', { 
+    //     const {data, error} = await fetchRequest('api/parser_products/images', { 
     //         method: 'GET',
     //         query: params,
     //     });
@@ -22,14 +22,14 @@ export default defineNuxtPlugin((app) => {
     // }
 
     // const fetchRequest = async function(url: string, opts: any){
-    //     let mainSait = 'http://localhost:8888';
+    //     let mainSait = 'http://glebhe0h.beget.tech';
     //     if(mainSait[mainSait.length - 1] != '/') mainSait = mainSait + '/';
     //     if(url[url.length - 1] == '/') url = url.substring(0, url.length - 1);
     
     //     opts = {...opts, ...{
     //         query: {
     //             ...opts.query,
-    //             ...{'user_token': useCookie('user_token')},
+    //             ...{'user_token': useCookie('user_token').value},
     //         }
     //     }};
     

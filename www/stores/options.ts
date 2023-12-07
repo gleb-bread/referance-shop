@@ -1,3 +1,3 @@
 export const GlobalVars = {
-    sait: 'http://localhost:8888//',
+    sait: 'http://glebhe0h.beget.tech/',
 }
