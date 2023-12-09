@@ -1,6 +1,7 @@
 <template>
     <v-virtual-scroll
         class="pa-10"
+        height="calc(100vh-64px)"
         :items="Helper.chunk<string>(Object.keys(getImageCategories), currectCell.cells)">
         <template #default="{ item }">
             <v-row>
@@ -20,14 +21,11 @@
 <script lang='ts'>
     
 import { defineComponent } from 'vue';
-import { PropType } from 'vue';
 import { useParserProductsStore } from '@/app/stores/parserProducts/index';
 import * as Helper from '@/shared/helpers/helper';
+import categoryItem from './gridCategories/categoryItem.vue';
     
 export default defineComponent({
-    props: {
-        
-    },
     
     emits: {
         
@@ -68,9 +66,9 @@ export default defineComponent({
     methods: {
         
     },
-    
+
     components: {
-        
+        categoryItem
     },
 });
 </script>

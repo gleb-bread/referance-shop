@@ -4,26 +4,26 @@
       class="h-screen w-screen d-flex justify-center"
       :class="{ 'align-center': !parserProductsStore.getError }">
       <v-progress-circular
-          v-if="parserProductsStore.getLoading && !parserProductsStore.getError"
-          indeterminate
-          :size="58"
-          :width="8"
-          color="primary">
-        </v-progress-circular>
-        <v-alert
+        v-if="parserProductsStore.getLoading && !parserProductsStore.getError"
+        indeterminate
+        :size="58"
+        :width="8"
+        color="primary">
+      </v-progress-circular>
+      <v-alert
           v-if="parserProductsStore.getError"
           max-height="100px"
           type="error"
-          rounded="0"
+          :rounded="false"
           title="Ошибка"
           text="Произошла ошибка загрузки">
-        </v-alert>
-      </div>
+      </v-alert>
+    </div>
   </template>
   <template
     v-else>
-    <index-components-categories>
-    </index-components-categories>
+    <grid-categories>
+    </grid-categories>
   </template>
 </template>
 
@@ -32,6 +32,7 @@
 import { defineComponent } from 'vue';
 import wrapperPage from './wrapperPage.vue';
 import { useParserProductsStore } from '@/app/stores/parserProducts';
+import gridCategories from '@/widgets/catalogPage/gridCategories.vue';
     
 export default defineComponent({
     
@@ -55,6 +56,7 @@ export default defineComponent({
     
     components: {
         wrapperPage,
+        gridCategories
     },
 
     async created(){

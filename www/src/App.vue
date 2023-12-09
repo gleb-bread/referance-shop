@@ -3,10 +3,10 @@
     <header-menu
       v-model:show-menu-navigation="showMenuNavigation">
     </header-menu>
-    <v-main>
-      <menu-navigation
+    <menu-navigation
         v-model:show-navigation="showMenuNavigation">
       </menu-navigation>
+    <v-main>
       <router-view/>
     </v-main>
   </v-app>

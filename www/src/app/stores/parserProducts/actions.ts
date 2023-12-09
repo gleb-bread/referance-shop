@@ -28,7 +28,7 @@ export const actions = {
         let data = getCurrectData({});
         
         axios.get(getCurrectURL(`api/parser_products/categories`),{params: data}).then(response => {
-            let categories = JSON.parse(<string> data.value);
+            let categories = response.data;
             context.categories = categories;
             context.loading = false;
             context.errorLoading = false;
@@ -41,8 +41,8 @@ export const actions = {
     async setImgOnCategory(context: ParserProductsState){
         let data = getCurrectData({});
 
-        axios.get(`api/parser_products/images`,{params: data}).then(response => {
-            let images = JSON.parse(<string> data.value);
+        axios.get(getCurrectURL(`api/parser_products/images`),{params: data}).then(response => {
+            let images = response.data;
             context.imagesForCategory = images; 
         })
     }

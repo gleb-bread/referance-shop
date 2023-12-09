@@ -24,6 +24,4 @@ export async function init(){
     }
 
     let result = await axios.get(url, data);
-
-    console.log(result.data);
 }
