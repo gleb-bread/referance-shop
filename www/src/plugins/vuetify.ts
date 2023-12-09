@@ -15,6 +15,7 @@ export default createVuetify({
     defaults: defaultsConfig,
     
     theme: {
+        defaultTheme: 'defaultTheme',
         themes:{
             defaultTheme: defaultTheme,
             darkThemeForBtn: darkThemeForBtn,
