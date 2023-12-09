@@ -1,5 +1,27 @@
 <template>
-     <v-virtual-scroll
+    <template v-if="parserProducts.getLoading || parserProducts.getError">
+      <div
+        class="w-screen h-screen d-flex justify-center"
+        :class="{ 'align-center': !parserProducts.getError }">
+        <v-progress-circular
+          v-if="parserProducts.getLoading && !parserProducts.getError"
+          indeterminate
+          :size="58"
+          :width="8"
+          color="primary">
+        </v-progress-circular>
+        <v-alert
+            v-if="parserProducts.getError"
+            max-height="100px"
+            type="error"
+            :rounded="false"
+            title="Ошибка"
+            text="Произошла ошибка загрузки">
+        </v-alert>
+      </div>
+  </template>
+  <template v-else>
+    <v-virtual-scroll
         v-if="getParsingProducts.length"
         class="pa-10"
         height="calc(100vh - 64px)"
@@ -16,6 +38,7 @@
             </v-row>
         </template>
     </v-virtual-scroll>
+  </template>
 </template>
 
 <script lang='ts'>
@@ -68,15 +91,15 @@ export default defineComponent({
         async handlerCreatedElement(){
             let currectCategory = this.getCurrectCategoryFromURL();
             if(this.parserProducts.getParserCategories[<string> currectCategory]?.length){
-                this.menuStore.setMenuSubcategoriesBtn(this.menuStore, true);
                 this.menuStore.setMenuSuncategoriesShow(this.menuStore, true);
                 this.menuStore.setSubcategoriesList(this.menuStore, this.parserProducts.getParserCategories[<string> currectCategory]);
                 this.parserProducts.setParserProducts(this.parserProducts, {page: 1, category: currectCategory});
             } else {
-                this.parserProducts.setParserCategories(this.parserProducts);
-                this.menuStore.setMenuSubcategoriesBtn(this.menuStore, true);
-                this.parserProducts.setImgOnCategory(this.parserProducts);
-                this.parserProducts.setParserProducts(this.parserProducts, {page: 1, category: currectCategory});
+                await this.parserProducts.setParserCategories(this.parserProducts);
+                await this.parserProducts.setParserProducts(this.parserProducts, {page: 1, category: currectCategory});
+                await this.parserProducts.setImgOnCategory(this.parserProducts);
+                this.menuStore.setMenuSuncategoriesShow(this.menuStore, true);
+                this.menuStore.setSubcategoriesList(this.menuStore, this.parserProducts.getParserCategories[<string> currectCategory])
             }
         },
 

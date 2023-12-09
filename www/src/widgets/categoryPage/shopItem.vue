@@ -20,7 +20,7 @@
         <v-card-text
             class="pt-2">
             <h1 class="text-subtitle-1">{{ productItem.title }}</h1>
-            <v-list>
+            <!-- <v-list>
                 <v-list-item
                     class="pl-0">
                     <v-row>
@@ -31,7 +31,7 @@
                             cols="6">{{ productItem.stock }}</v-col>
                     </v-row>
                 </v-list-item>
-            </v-list>
+            </v-list> -->
         </v-card-text>
         <v-card-actions
             class="d-flex justify-space-between">

@@ -12,13 +12,10 @@
             {{ getTitle }}
         </v-app-bar-title>
         <v-spacer></v-spacer>
-        <v-fade-transition>
-            <v-btn 
-                v-if="getSubcategoriesShowBtn"
-                @click.stop="getShowSubcategories = !getShowSubcategories"
-                icon="mdi-format-list-bulleted">
-            </v-btn>
-        </v-fade-transition>
+        <v-btn 
+            @click.stop="getShowSubcategories = !getShowSubcategories"
+            icon="mdi-format-list-bulleted">
+        </v-btn>
     </v-app-bar>
 </template>
 

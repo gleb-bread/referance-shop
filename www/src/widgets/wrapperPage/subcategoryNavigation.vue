@@ -13,7 +13,7 @@
             @click.stop="getCurrectLinkSubcategory(subcategory)"
             :active="subcategory == getCurrectSubcategory()"
             link>
-            {{ subcategory }}
+            {{ subcategory ? subcategory : 'Другое' }}
         </v-list-item>
         </template>
     </v-navigation-drawer>
@@ -73,6 +73,8 @@ export default defineComponent({
                     category: decodeURI(<string> currectGetParam.get('category')),
                     subcategory: subcategory,
                 });
+
+                currectGetParam.delete('subcategory');
                 currectGetParam.append('subcategory', encodeURI(subcategory));
 
                 this.$router.replace(this.$route.path + '?' + currectGetParam.toString());
@@ -87,7 +89,7 @@ export default defineComponent({
             let currectGetParam = new URLSearchParams(getParam);
 
             if(currectGetParam.get('subcategory')){
-                return decodeURI(<string> currectGetParam.get('subcategory'));
+                return decodeURI(currectGetParam.get('subcategory') === 'null' ? "" : <string> currectGetParam.get('subcategory'));
             } else {
                 return false;
             }
