@@ -19,6 +19,14 @@ export const getters = {
 
     getError(state: ParserProductsState){
         return state.requestObserver.getMixError('errorCategory', 'errorImg', 'errorProduct')
+    },
+
+    getIsLastPage(state: ParserProductsState){
+        return state.isLastPage;
+    },
+
+    getPageCount(state: ParserProductsState){
+        return state.page;
     }
 
 }

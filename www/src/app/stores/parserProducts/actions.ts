@@ -14,11 +14,39 @@ export const actions = {
         axios.get(getCurrectURL(`api/parser_products`),{params: data}).then(response => {
             let defaultData = getJSONPasrsingObject(response.data as unknown as string);
             context.products = defaultData;
+            if(defaultData?.length >= 100){
+                context.isLastPage = false;
+            } else {
+                context.isLastPage = true;
+            }
+            context.page = 1;
             context.requestObserver.setLoading('loadingProduct', false);
             context.requestObserver.setError('errorProduct', false);
         }).catch(responce => {
             context.requestObserver.setLoading('loadingProduct', false);
             context.requestObserver.setError('errorProduct', false);
+        })
+    },
+
+    async updateParserProducts(context: ParserProductsState, params:ParserProductsFilter = {page: 1} as ParserProductsFilter){
+        let data = getCurrectData(params);
+
+
+        axios.get(getCurrectURL(`api/parser_products`),{params: data}).then(response => {
+            let defaultData = getJSONPasrsingObject(response.data as unknown as string);
+            context.products = [...context.products, ...defaultData];
+            if(defaultData?.length >= 100){
+                context.isLastPage = false;
+            } else {
+                context.isLastPage = true;
+            }
+            
+            if(params.page){
+                context.page = <number> params.page;
+            }
+           
+        }).catch(responce => {
+            
         })
     },
 

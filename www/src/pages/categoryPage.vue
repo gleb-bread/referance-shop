@@ -24,6 +24,8 @@
     <v-virtual-scroll
         v-if="getParsingProducts.length"
         class="pa-10"
+        ref="shop-catalog"
+        @scroll.stop="handlerScroll"
         height="calc(100vh - 64px)"
         :items="Helper.chunk<ParserProductsType>(getParsingProducts, currectCell.cells)">
         <template #default="{ item }">
@@ -82,6 +84,11 @@ export default defineComponent({
             parserProducts: useParserProductsStore(),
             menuStore: useMenuStore(),
 
+            currectCategory: '',
+            currectSubcategory: '',
+
+            isUpdate: false,
+
             Helper: Helper,
 
         };
@@ -90,13 +97,20 @@ export default defineComponent({
     methods: {
         async handlerCreatedElement(){
             let currectCategory = this.getCurrectCategoryFromURL();
+            this.currectCategory = <string> currectCategory;
+            let currectSubcategory = this.getCurrectSubcategoryFromURL();
+            this.currectSubcategory = currectSubcategory;
             if(this.parserProducts.getParserCategories[<string> currectCategory]?.length){
                 this.menuStore.setMenuSuncategoriesShow(this.menuStore, true);
                 this.menuStore.setSubcategoriesList(this.menuStore, this.parserProducts.getParserCategories[<string> currectCategory]);
-                this.parserProducts.setParserProducts(this.parserProducts, {page: 1, category: currectCategory});
+                this.parserProducts.setParserProducts(this.parserProducts, 
+                    this.Helper.getObjectWithExitingFields({page: 1, category: currectCategory})
+                );
             } else {
                 await this.parserProducts.setParserCategories(this.parserProducts);
-                await this.parserProducts.setParserProducts(this.parserProducts, {page: 1, category: currectCategory});
+                await this.parserProducts.setParserProducts(this.parserProducts, 
+                    this.Helper.getObjectWithExitingFields({page: 1, category: currectCategory})
+                );
                 await this.parserProducts.setImgOnCategory(this.parserProducts);
                 this.menuStore.setMenuSuncategoriesShow(this.menuStore, true);
                 this.menuStore.setSubcategoriesList(this.menuStore, this.parserProducts.getParserCategories[<string> currectCategory])
@@ -110,6 +124,25 @@ export default defineComponent({
             } else {
                 this.$router.replace('/');
             }
+        },
+
+        getCurrectSubcategoryFromURL(){
+            let params = new URLSearchParams(String(window.location.href.split('?')[1]));
+            if(params.get('subcategory')){
+                return decodeURI(<string> params.get('subcategory'));
+            } else {
+                return '';
+            }
+        },
+ 
+        async handlerScroll(){
+            let block = (<HTMLElement>(<any> this.$refs['shop-catalog']).$el);
+
+           if((Math.ceil(block.scrollTop + block.clientHeight) >= Math.ceil(block.scrollHeight - 200)) && !this.isUpdate){
+            await this.parserProducts.updateParserProducts(this.parserProducts, {page: this.parserProducts.getPageCount + 1, category: this.currectCategory});
+            this.isUpdate = true;
+            setTimeout(() => {this.isUpdate = false}, 2000);
+           } 
         }
     },
     

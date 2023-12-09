@@ -17,6 +17,8 @@ export interface ParserProductsState {
     categories: {[key: string]: string[]},
     subcategoryShow: boolean,
     imagesForCategory: {[key: string]: string},
+    isLastPage: boolean,
+    page: number,
     requestObserver: ObserverRequest<ParserProductsLoading>,
 }
 
@@ -25,5 +27,7 @@ export const State: ParserProductsState = {
     categories: {} as {[key: string]: string[]},
     imagesForCategory: {} as {[key: string]: string},
     subcategoryShow: false,
+    page: 0,
+    isLastPage: false,
     requestObserver: new ObserverRequest<ParserProductsLoading>(),
 }
