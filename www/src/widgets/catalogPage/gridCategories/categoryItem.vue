@@ -39,6 +39,7 @@ import { defineComponent } from 'vue';
 import { PropType } from 'vue';
 import { ParserProductsFilter } from '@/app/stores/types';
 import { useParserProductsStore } from '@/app/stores/parserProducts';
+import * as Helper from '@/shared/helpers/helper';
     
 export default defineComponent({
     props: {
@@ -64,12 +65,15 @@ export default defineComponent({
         return {
             parserProducts: useParserProductsStore(),
             isHover: false,
+
+            Helper: Helper,
         };
     },
     
     methods: {
         handlerClickCategory(category: string){
-
+            let url = this.Helper.getLinkWithGetParams('/category', {category: category});
+            this.$router.replace(url);
         },
     },
     

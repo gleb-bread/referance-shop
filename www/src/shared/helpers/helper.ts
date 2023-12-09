@@ -3,3 +3,15 @@ export const chunk = function<T>(a: any[], s: number){
         (x = i % s) ? n[c][x] = a[i] as T : n[++c] = [a[i] as T];
     return n;
 };
+
+export const getLinkWithGetParams = function(path: string,params: {[key: string]: string}){
+    let link = path;
+
+    let getParams = new URLSearchParams(window.location.search);
+    Object.keys(params).forEach(key => {
+        getParams.append(key, encodeURI(params[key]))
+    });
+
+    return link + '?' + getParams.toString();
+
+}

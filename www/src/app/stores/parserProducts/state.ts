@@ -15,6 +15,7 @@ export interface ParserProductsLoading {
 export interface ParserProductsState {
     products: ParserProductsType[],
     categories: {[key: string]: string[]},
+    subcategoryShow: boolean,
     imagesForCategory: {[key: string]: string},
     requestObserver: ObserverRequest<ParserProductsLoading>,
 }
@@ -23,5 +24,6 @@ export const State: ParserProductsState = {
     products: [] as ParserProductsType[],
     categories: {} as {[key: string]: string[]},
     imagesForCategory: {} as {[key: string]: string},
+    subcategoryShow: false,
     requestObserver: new ObserverRequest<ParserProductsLoading>(),
 }

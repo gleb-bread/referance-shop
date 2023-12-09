@@ -51,17 +51,17 @@ export default defineComponent({
     },
     
     methods: {
-        
+
     },
     
     components: {
-        wrapperPage,
-        gridCategories
+      wrapperPage,
+      gridCategories
     },
 
     async created(){
-        await this.parserProductsStore.setParserCategories(this.parserProductsStore);
-        await this.parserProductsStore.setImgOnCategory(this.parserProductsStore);
+      await this.parserProductsStore.setParserCategories(this.parserProductsStore);
+      await this.parserProductsStore.setImgOnCategory(this.parserProductsStore);
     }
 
 });

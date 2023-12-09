@@ -9,42 +9,56 @@
             </v-btn>
         </v-app-bar-nav-icon>
         <v-app-bar-title>
-            Каталог
+            {{ getTitle }}
         </v-app-bar-title>
+        <v-spacer></v-spacer>
+        <v-fade-transition>
+            <v-btn 
+                v-if="getSubcategoriesShowBtn"
+                @click.stop="getShowSubcategories = !getShowSubcategories"
+                icon="mdi-format-list-bulleted">
+            </v-btn>
+        </v-fade-transition>
     </v-app-bar>
 </template>
 
 <script lang='ts'>
     
 import { defineComponent } from 'vue';
+import { useMenuStore } from '@/app/stores/menu/index';
     
 export default defineComponent({
-    
-    props: {
-        showMenuNavigation: {
-            type: Boolean,
-            required: true,
-        }
-    },
-
-    emits: {
-        'update:showMenuNavigation': (flag: boolean) => true,
-    },
-    
     computed: {
         getShowMenuNavigation: {
             get(){
-                return this.showMenuNavigation;
+                return this.menuStore.getMenuNavigationShow;
             },
             set(flag: boolean){
-                this.$emit('update:showMenuNavigation', flag);
+                this.menuStore.setMenuNavigationShow(this.menuStore, flag);
             }
+        },
+
+        getShowSubcategories: {
+            get(){
+                return this.menuStore.getMenuSubcategoriesShow;
+            },
+            set(flag: boolean){
+                this.menuStore.setMenuSuncategoriesShow(this.menuStore, flag);
+            }
+        },
+
+        getTitle(){
+            return this.menuStore.getMenuTitle;
+        },
+
+        getSubcategoriesShowBtn(){
+            return this.menuStore.getMenuSubcategoriesBtn;
         }
     },
     
     data() {
         return {
-            
+            menuStore: useMenuStore(),
         };
     },
     

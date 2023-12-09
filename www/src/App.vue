@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <header-menu
-      v-model:show-menu-navigation="showMenuNavigation">
+    <header-menu>
     </header-menu>
-    <menu-navigation
-        v-model:show-navigation="showMenuNavigation">
-      </menu-navigation>
+    <menu-navigation>
+    </menu-navigation>
+    <subcategory-navigation>
+    </subcategory-navigation>
     <v-main>
       <router-view/>
     </v-main>
@@ -16,6 +16,7 @@
 import { defineComponent } from 'vue';
 import headerMenu from '@/widgets/wrapperPage/headerMenu.vue';
 import menuNavigation from './widgets/wrapperPage/menuNavigation.vue';
+import subcategoryNavigation from './widgets/wrapperPage/subcategoryNavigation.vue';
 
 export default defineComponent({
   name: 'App',
@@ -28,7 +29,8 @@ export default defineComponent({
 
   components: {
     headerMenu,
-    menuNavigation
+    menuNavigation,
+    subcategoryNavigation
   }
 
 })

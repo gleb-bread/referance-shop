@@ -19,31 +19,18 @@
 <script lang='ts'>
     
 import { defineComponent } from 'vue';
-import * as HelperCookie from '@/shared/helpers/helperCookie';
-import { getCurrectURL } from '@/shared/helpers/helperAPI';
-import axios from 'axios';
-import { v4 } from 'uuid';
+import { useMenuStore } from '@/app/stores/menu';
     
 export default defineComponent({
-    props: {
-        showNavigation: {
-            type: Boolean,
-            required: true,
-        }
-    },
-    
-    emits: {
-        'update:showNavigation': (flag: boolean) => true
-    },
     
     computed: {
         getShowNavigation: {
             get(){
-                return this.showNavigation;
+                return this.menuStore.getMenuNavigationShow;
             },
 
             set(flag: boolean){
-                this.$emit('update:showNavigation', flag);
+                this.menuStore.setMenuNavigationShow(this.menuStore, flag);
             }
         }
     },
@@ -56,7 +43,9 @@ export default defineComponent({
                     text: 'Главная',
                     link: '/'
                 }
-            ]
+            ],
+
+            menuStore: useMenuStore(),
         };
     },
     

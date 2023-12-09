@@ -66,6 +66,10 @@ export const actions = {
             context.requestObserver.setLoading('loadingImg', false);
             context.requestObserver.setLoading('errorImg', true);
         })
+    },
+
+    setSubcategoryShow(context: ParserProductsState, flag: boolean){
+        context.subcategoryShow = flag;
     }
 }
 
