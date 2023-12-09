@@ -6,7 +6,7 @@ import axios from "axios";
 
 export const actions = {
     async setParserProducts(context: ParserProductsState, params:ParserProductsFilter = {page: 1} as ParserProductsFilter){
-        context.loading = true;
+        context.requestObserver.setLoading('loadingProduct', true);
 
         let data = getCurrectData(params);
 
@@ -14,36 +14,44 @@ export const actions = {
         axios.get(getCurrectURL(`api/parser_products`),{params: data}).then(response => {
             let defaultData = getJSONPasrsingObject(response.data as unknown as string);
             context.products = defaultData;
-            context.loading = false;
-            context.errorLoading = false;
+            context.requestObserver.setLoading('loadingProduct', false);
+            context.requestObserver.setError('errorProduct', false);
         }).catch(responce => {
-            context.loading = false;
-            context.errorLoading = true;
+            context.requestObserver.setLoading('loadingProduct', false);
+            context.requestObserver.setError('errorProduct', false);
         })
     },
 
     async setParserCategories(context: ParserProductsState){
-        context.loading = true;
+        context.requestObserver.setLoading('loadingCategory', true);
 
         let data = getCurrectData({});
         
         axios.get(getCurrectURL(`api/parser_products/categories`),{params: data}).then(response => {
             let categories = response.data;
             context.categories = categories;
-            context.loading = false;
-            context.errorLoading = false;
+            context.requestObserver.setLoading('loadingCategory', false);
+            context.requestObserver.setError('errorCategory', false);
         }).catch(response => {
-            context.loading = false;
-            context.errorLoading = true;
+            context.requestObserver.setLoading('loadingCategory', false);
+            context.requestObserver.setError('errorCategory', true);
         }) 
     },
 
     async setImgOnCategory(context: ParserProductsState){
         let data = getCurrectData({});
 
+        context.requestObserver.setLoading('loadingImg', true);
+
         axios.get(getCurrectURL(`api/parser_products/images`),{params: data}).then(response => {
             let images = response.data;
             context.imagesForCategory = images; 
+
+            context.requestObserver.setLoading('loadingImg', false);
+            context.requestObserver.setLoading('errorImg', false);
+        }).catch(responce => {
+            context.requestObserver.setLoading('loadingImg', false);
+            context.requestObserver.setLoading('errorImg', true);
         })
     }
 }

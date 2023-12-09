@@ -14,10 +14,11 @@ export const getters = {
     },
 
     getLoading(state: ParserProductsState){
-        return state.loading;
+        return state.requestObserver.getMixLoading('loadingCategory', 'loadingImg', 'loadingProduct');
     },
 
     getError(state: ParserProductsState){
-        return state.errorLoading;
+        return state.requestObserver.getMixError('errorCategory', 'errorImg', 'errorProduct')
     }
+
 }

@@ -1,24 +1,24 @@
 <template>
     <template v-if="parserProductsStore.getLoading || parserProductsStore.getError">
-    <div
-      class="h-screen w-screen d-flex justify-center"
-      :class="{ 'align-center': !parserProductsStore.getError }">
-      <v-progress-circular
-        v-if="parserProductsStore.getLoading && !parserProductsStore.getError"
-        indeterminate
-        :size="58"
-        :width="8"
-        color="primary">
-      </v-progress-circular>
-      <v-alert
-          v-if="parserProductsStore.getError"
-          max-height="100px"
-          type="error"
-          :rounded="false"
-          title="Ошибка"
-          text="Произошла ошибка загрузки">
-      </v-alert>
-    </div>
+      <div
+        class="w-screen h-screen d-flex justify-center"
+        :class="{ 'align-center': !parserProductsStore.getError }">
+        <v-progress-circular
+          v-if="parserProductsStore.getLoading && !parserProductsStore.getError"
+          indeterminate
+          :size="58"
+          :width="8"
+          color="primary">
+        </v-progress-circular>
+        <v-alert
+            v-if="parserProductsStore.getError"
+            max-height="100px"
+            type="error"
+            :rounded="false"
+            title="Ошибка"
+            text="Произошла ошибка загрузки">
+        </v-alert>
+      </div>
   </template>
   <template
     v-else>
@@ -68,4 +68,13 @@ export default defineComponent({
 </script>
     
 <style scoped lang='scss'>
+
+.w-screen{
+  width: 100vw;
+}
+
+.h-screen{
+  height: calc(100vh - 64px);
+}
+
 </style>
