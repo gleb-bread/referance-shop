@@ -1,0 +1,1 @@
+export const publicPath = 'http://glebhe0h.beget.tech';

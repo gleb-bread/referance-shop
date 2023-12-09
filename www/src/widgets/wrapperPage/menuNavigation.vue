@@ -19,7 +19,10 @@
 <script lang='ts'>
     
 import { defineComponent } from 'vue';
-import { PropType } from 'vue';
+import * as HelperCookie from '@/shared/helpers/helperCookie';
+import { getCorrectURL } from '@/shared/helpers/helperAPI';
+import axios from 'axios';
+import { v4 } from 'uuid';
     
 export default defineComponent({
     props: {
@@ -64,6 +67,10 @@ export default defineComponent({
     components: {
         
     },
+
+    async created(){
+        
+    }
 });
 </script>
     
