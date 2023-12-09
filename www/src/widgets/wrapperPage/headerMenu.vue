@@ -1,11 +1,12 @@
 <template>
-    123
+    <v-app-bar
+        color="primary">
+    </v-app-bar>
 </template>
 
 <script lang='ts'>
     
 import { defineComponent } from 'vue';
-import wrapperPage from './wrapperPage.vue';
     
 export default defineComponent({
     
@@ -28,7 +29,7 @@ export default defineComponent({
     },
     
     components: {
-        wrapperPage,
+        
     },
 });
 </script>

@@ -3,7 +3,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = defineConfig({
-  publicPath:  process.env.NODE_ENV === 'development' ? "/www/dist" : "/www/production",
   transpileDependencies: true,
   productionSourceMap: process.env.NODE_ENV === 'development' ? true : false,
   filenameHashing: false,

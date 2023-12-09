@@ -1,6 +1,6 @@
 // Styles
 import "@mdi/font/css/materialdesignicons.css";
-import '@/app/styles/vuetifyAliases.scss';
+import '@/app/styles/index.scss';
 import { defaultTheme } from "./themes/defaultTheme";
 import { darkThemeForBtn } from "./themes/darkThemeForBtn";
 import { Aliases } from './componentsAliases/aliases';
