@@ -1,3 +1,3 @@
 export const defaultColors = {
-    '$dark-blue': '#1b0064',
+    'primary': '#1b0064',
 }
