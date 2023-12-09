@@ -36,7 +36,9 @@
         <v-card-actions
             class="d-flex justify-space-between">
             <div>
-                <v-btn color="primary">Купить</v-btn>
+                <v-btn 
+                    color="primary"
+                    :to="`/product/${productItem.id}`">Купить</v-btn>
                 <v-btn color="secondary">Подробнее</v-btn>
             </div>
             <div
