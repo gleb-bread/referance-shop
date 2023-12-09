@@ -4,8 +4,6 @@ import { useCookie } from "nuxt/app";
 export const fetchRequest = async function(url: string, opts: any){
     const token =  useCookie('user_token');
 
-    console.log();
-
     let mainSait = GlobalVars.sait;
     if(mainSait[mainSait.length - 1] != '/') mainSait = mainSait + '/';
     if(url[url.length - 1] == '/') url = url.substring(0, url.length - 1);
@@ -13,7 +11,7 @@ export const fetchRequest = async function(url: string, opts: any){
     opts = {...opts, ...{
         query: {
             ...opts.query,
-            ...{'user_token': token},
+            ...{'user_token': token.value},
         }
     }};
 

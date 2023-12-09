@@ -13,11 +13,8 @@ export const actions = {
         context.subcategoriesShow = flag;
     },
 
-    setCurrectCategory(context: MenuState, str: string, flag: boolean){
+    setCurrectCategory(context: MenuState, str: string){
         context.currectCategory = str;
-        if(flag){
-            context.subcategoriesShow = true;
-        }
     },
 
     setCurrectSubcategory(context: MenuState, strOrFlag: string | false){

@@ -6,13 +6,15 @@ export const actions = {
     async setParserProducts(context: ParserProductsState, params:ParserProductsFilter = {page: 1} as ParserProductsFilter){
         context.loading = true;
 
-        const { data } = await useAsyncData('parsingProducts', async () =>{
-            await $fetch(`api/parser_products`,{
-                method: 'GET',
-                query: params,
-            });   
-        })
-        
+        let data = await fetchRequest(`api/parser_products`,{
+            method: 'GET',
+            query: {
+                ...params,
+                fetchOnServer: false
+            }
+        });
+
+
         if(data.value){
             let defaultData = getJSONPasrsingObject(data.value as unknown as string);
             context.products = defaultData;
@@ -29,6 +31,7 @@ export const actions = {
         const data = await fetchRequest(`api/parser_products/categories`,{
             method: 'GET',
             query: {
+                fetchOnServer: false
             }
         });
 
@@ -47,6 +50,7 @@ export const actions = {
             const data = await fetchRequest(`api/parser_products/images`,{
                 method: 'GET',
                 query: {
+                    fetchOnServer: false
                 }
             });
 

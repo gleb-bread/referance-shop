@@ -1,5 +1,5 @@
 import { version as version$1, unref, inject as inject$1, ref, toRef, getCurrentInstance as getCurrentInstance$1, onServerPrefetch, computed, reactive, warn, provide, defineComponent as defineComponent$1, readonly, watch, onScopeDispose, toRaw, toRefs, isRef, createVNode, Fragment, mergeProps, Text, watchEffect, Transition, resolveDynamicComponent, withDirectives, resolveDirective, shallowRef, hasInjectionContext, capitalize, effectScope, TransitionGroup, h, camelize, nextTick, useSSRContext, createApp, isReactive, getCurrentScope, onErrorCaptured, shallowReactive, isReadonly, markRaw, defineAsyncComponent, isShallow, withCtx, Suspense } from 'vue';
-import { f as useRuntimeConfig$1, m as withQuery, n as hasProtocol, p as parseURL, o as isScriptProtocol, j as joinURL, i as createError$1, q as hash, r as parse, t as getRequestHeader, $ as $fetch, v as sanitizeStatusCode, x as destr, y as isEqual$1, z as setCookie, A as getCookie, B as deleteCookie, C as createHooks, D as defu } from '../nitro/node-server.mjs';
+import { h as useRuntimeConfig$1, n as withQuery, o as hasProtocol, p as parseURL, q as isScriptProtocol, j as joinURL, k as createError$1, r as hash, t as parse, v as getRequestHeader, $ as $fetch, x as sanitizeStatusCode, y as destr, z as isEqual$1, A as setCookie, B as getCookie, C as deleteCookie, D as createHooks, E as defu } from '../nitro/node-server.mjs';
 import { getActiveHead } from 'unhead';
 import { defineHeadPlugin } from '@unhead/shared';
 import { createMemoryHistory, createRouter, START_LOCATION, useRoute as useRoute$1, RouterView } from 'vue-router';
@@ -1518,13 +1518,16 @@ const init_grdyAU8lhf = /* @__PURE__ */ defineNuxtPlugin((app) => {
       secure: true ,
       maxAge: 36e4
     });
+    console.log(tokenUser.value);
     let params = {
       "user_token": tokenUser.value || v4()
     };
+    console.log(params);
     const data = await fetchRequest("api/users", {
       method: "GET",
       query: params
     });
+    console.log(data.value);
     if (data.value) {
       tokenUser.value = tokenUser.value ? tokenUser.value : params.user_token;
     }

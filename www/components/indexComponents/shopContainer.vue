@@ -1,5 +1,6 @@
 <template>
     <v-virtual-scroll
+        v-if="getParsingProducts.length"
         class="pa-10"
         :height="runtimeConfig.public.heightWindow"
         :items="StructHelper.chunk<ParserProductsType>(getParsingProducts, currectCell.cells)">
@@ -23,6 +24,7 @@ import { defineComponent } from 'vue';
 import { PropType } from 'vue';
 import { ParserProductsType } from '~/stores/types';
 import * as StructHelper from '~/shared/helpers/structHelper';
+import { ParserProductsFilter } from '~/stores/types';
     
 export default defineComponent({
     
@@ -56,7 +58,10 @@ export default defineComponent({
 
             StructHelper: StructHelper,
 
+            response: [] as ParserProductsType[],
+
             ParserProducts: useParserProductsStore(),
+            menuStore: useMenuStore(),
             
             runtimeConfig: useRuntimeConfig(),
 
@@ -80,8 +85,12 @@ export default defineComponent({
     components: {
         
     },
+
+    async mounted() {
+        
+    }
 });
 </script>
-    
+
 <style scoped lang='scss'>
 </style>

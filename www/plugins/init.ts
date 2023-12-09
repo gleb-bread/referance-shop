@@ -7,7 +7,6 @@ export default defineNuxtPlugin((app) => {
         let tokenUser = useCookie('user_token', {
             httpOnly: true,
             sameSite: 'strict',
-            secure: process.env.NODE_ENV === 'production' ? true : false,
             maxAge: 360000,
         });
 
@@ -24,8 +23,6 @@ export default defineNuxtPlugin((app) => {
         if(data.value){
             tokenUser.value = tokenUser.value ? tokenUser.value : params.user_token;
         }
-
-        console.log(tokenUser.value);
 
     };
 

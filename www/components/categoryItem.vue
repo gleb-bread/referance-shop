@@ -37,6 +37,7 @@
     
 import { defineComponent } from 'vue';
 import { PropType } from 'vue';
+import { ParserProductsFilter } from '~/stores/types';
     
 export default defineComponent({
     props: {
@@ -56,24 +57,27 @@ export default defineComponent({
     },
     
     computed: {
-        
+
     },
     
     data() {
         return {
             isHover: false,
             menuStore: useMenuStore(),
+            parserProducts: useParserProductsStore(),
         };
     },
     
     methods: {
         handlerClickCategory(category: string){
-            this.menuStore.setCurrectCategory(this.menuStore, category, true);
+            this.menuStore.setCurrectCategory(this.menuStore, category);
+            if(this.menuStore.getCurrectCategory){
+                this.parserProducts.setParserProducts(this.parserProducts, {
+                    page: 1,
+                    category: this.menuStore.getCurrectCategory as string
+                } as ParserProductsFilter);
+            }
         },
-
-        handlerDbClickCategory(category: string){
-            this.menuStore.setCurrectCategory(this.menuStore, category, false);
-        }
     },
     
     components: {

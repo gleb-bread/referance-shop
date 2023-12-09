@@ -65,11 +65,6 @@ export default defineComponent({
         if(!this.menuStore.getCurrectCategory){
             this.$nuxt.$router.replace({path: '/'});
         }
-
-        this.parsingProducts.setParserProducts(this.parsingProducts, {
-            page: 1,
-            category: this.menuStore.getCurrectCategory as string
-        } as ParserProductsFilter);
     }
 });
 </script>
