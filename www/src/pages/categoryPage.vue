@@ -1,5 +1,21 @@
 <template>
-    <span v-for="item in getParsingProducts">{{ item }}</span>
+     <v-virtual-scroll
+        v-if="getParsingProducts.length"
+        class="pa-10"
+        height="calc(100vh - 64px)"
+        :items="Helper.chunk<ParserProductsType>(getParsingProducts, currectCell.cells)">
+        <template #default="{ item }">
+            <v-row>
+                <v-col
+                    :cols="currectCell.size"
+                    v-for="itemProduct in item">
+                    <shop-item
+                        :product-item="itemProduct">
+                    </shop-item>
+                </v-col>
+            </v-row>
+        </template>
+    </v-virtual-scroll>
 </template>
 
 <script lang='ts'>
@@ -8,6 +24,8 @@ import { defineComponent } from 'vue';
 import { useParserProductsStore } from '@/app/stores/parserProducts';
 import { useMenuStore } from '@/app/stores/menu';
 import { ParserProductsType } from '@/app/stores/types';
+import * as Helper from '@/shared/helpers/helper';
+import shopItem from '@/widgets/categoryPage/shopItem.vue';
     
 export default defineComponent({
     
@@ -16,6 +34,21 @@ export default defineComponent({
     },
     
     computed: {
+        currectCell(): {cells: number, size: number}{
+            if(this.$vuetify.display.width > 2100){
+                return {cells: 6, size: 2};
+            } else if(this.$vuetify.display.width > 1800){
+                return {cells: 4, size: 3};
+            } else if(this.$vuetify.display.width > 1024){
+                return {cells: 3, size: 4};
+            } else if(this.$vuetify.display.width > 800){
+                return {cells: 2, size: 6};
+            } else if (this.$vuetify.display.width > 500) {
+                return {cells: 1, size: 12};
+            }
+            return {cells: 1, size: 12};
+        },
+
         getParsingProducts(): ParserProductsType[]{
             return this.parserProducts.getParserProducts;
         }
@@ -25,6 +58,8 @@ export default defineComponent({
         return {
             parserProducts: useParserProductsStore(),
             menuStore: useMenuStore(),
+
+            Helper: Helper,
 
         };
     },
@@ -56,7 +91,7 @@ export default defineComponent({
     },
     
     components: {
-        
+        shopItem,
     },
 
     async created(){
