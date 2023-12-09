@@ -1,5 +1,7 @@
 <template>
-    <v-navigation-drawer>
+    <v-navigation-drawer
+        v-model:model-value="showNavigation"
+        color="secondary">
         <v-list-item title="Навигация"></v-list-item>
         <v-divider></v-divider>
         <template
