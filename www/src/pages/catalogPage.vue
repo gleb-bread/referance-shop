@@ -59,6 +59,7 @@ export default defineComponent({
 
     async created(){
         await this.parserProductsStore.setParserCategories(this.parserProductsStore);
+        await this.parserProductsStore.setImgOnCategory(this.parserProductsStore);
     }
 
 });

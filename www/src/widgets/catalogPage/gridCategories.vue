@@ -1,7 +1,7 @@
 <template>
     <v-virtual-scroll
         class="pa-10"
-        :items="StructHelper.chunk<string>(Object.keys(getImageCategories), currectCell.cells)">
+        :items="Helper.chunk<string>(Object.keys(getImageCategories), currectCell.cells)">
         <template #default="{ item }">
             <v-row>
                 <v-col
@@ -21,7 +21,8 @@
     
 import { defineComponent } from 'vue';
 import { PropType } from 'vue';
-import { useParserProductsStore } from '@/app/stores/parserProducts/index'
+import { useParserProductsStore } from '@/app/stores/parserProducts/index';
+import * as Helper from '@/shared/helpers/helper';
     
 export default defineComponent({
     props: {
@@ -50,12 +51,17 @@ export default defineComponent({
 
         getParsingProducts(){
             return this.parserProductStore.getParserProducts;
+        },
+
+        getImageCategories(){
+            return this.parserProductStore.getParserImageCategories;
         }
     },
     
     data() {
         return {
             parserProductStore: useParserProductsStore(),
+            Helper: Helper,
         };
     },
     
