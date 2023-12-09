@@ -10,6 +10,8 @@
         <template
             v-for="subcategory in getSubcategoriesList">
             <v-list-item 
+            @click.stop="getCurrectLinkSubcategory(subcategory)"
+            :active="subcategory == getCurrectSubcategory()"
             link>
             {{ subcategory }}
         </v-list-item>
@@ -21,13 +23,15 @@
     
 import { defineComponent } from 'vue';
 import { useMenuStore } from '@/app/stores/menu';
+import { useParserProductsStore } from '@/app/stores/parserProducts';
 import { toHandlers } from 'vue';
+import { resolveTransitionHooks } from 'vue';
     
 export default defineComponent({
     
     computed: {
         getShowSubcategories: {
-            get(){
+            get(): boolean{
                 return this.menuStore.getMenuSubcategoriesShow;
             },
 
@@ -36,7 +40,7 @@ export default defineComponent({
             }
         },
 
-        getSubcategoriesList(){
+        getSubcategoriesList(): string[]{
             return this.menuStore.getSubcategoriesList;
         }
     },
@@ -52,11 +56,42 @@ export default defineComponent({
             ],
 
             menuStore: useMenuStore(),
+            parserProductsStore: useParserProductsStore(),
         };
     },
     
     methods: {
-        
+        getCurrectLinkSubcategory(subcategory: string){
+            let getParam = window.location.href.split('?')[1];
+
+            let currectGetParam = new URLSearchParams(getParam);
+
+            if(currectGetParam.get('category')){
+                this.parserProductsStore.setParserProducts(this.parserProductsStore,
+                {
+                    page: 1,
+                    category: decodeURI(<string> currectGetParam.get('category')),
+                    subcategory: subcategory,
+                });
+                currectGetParam.append('subcategory', encodeURI(subcategory));
+
+                this.$router.replace(this.$route.path + '?' + currectGetParam.toString());
+            } else {
+                this.$router.replace('/');
+            }
+        },
+
+        getCurrectSubcategory(){
+            let getParam = window.location.href.split('?')[1];
+
+            let currectGetParam = new URLSearchParams(getParam);
+
+            if(currectGetParam.get('subcategory')){
+                return decodeURI(<string> currectGetParam.get('subcategory'));
+            } else {
+                return false;
+            }
+        }
     },
     
     components: {

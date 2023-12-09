@@ -12,7 +12,7 @@
                     :height="100"
                     :width="'auto'"
                     aspect-ratio="28/1"
-                    cover
+                    :cover="productItem.category === 'Напольные покрытия' || productItem.category === 'Плитка и керамогранит'"
                     :src="productItem.images?.['img1']">
                 </v-img>
             </template>
@@ -43,7 +43,7 @@
                 class="d-flex align-center justify-end text-end">
                 <span
                     class="text-error">
-                    {{ Helper.convertMoneyTypeWithoutRuble(String(productItem.price)) + ' руб.'}}
+                    {{ Helper.convertMoneyTypeWithoutRuble(String(productItem.price ? productItem.price : 0)) + ' руб.'}}
                 </span>
             </div>
         </v-card-actions>
