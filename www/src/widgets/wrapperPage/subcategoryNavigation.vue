@@ -5,10 +5,12 @@
 <script lang='ts'>
     
 import { defineComponent } from 'vue';
-import wrapperPage from './wrapperPage.vue';
-import { useParserProductsStore } from '@/app/stores/parserProducts';
+import { PropType } from 'vue';
     
 export default defineComponent({
+    props: {
+        
+    },
     
     emits: {
         
@@ -20,7 +22,7 @@ export default defineComponent({
     
     data() {
         return {
-            parserProductsStore: useParserProductsStore(),
+            
         };
     },
     
@@ -29,13 +31,8 @@ export default defineComponent({
     },
     
     components: {
-        wrapperPage,
+        
     },
-
-    async created(){
-        await this.parserProductsStore.setParserCategories(this.parserProductsStore);
-    }
-
 });
 </script>
     

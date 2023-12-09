@@ -2,7 +2,7 @@ import { publicPath } from "@/app/stores/options";
 
 
 
-export const getCorrectURL = function(localPath: string) {
+export const getCurrectURL = function(localPath: string) {
     let path = publicPath[publicPath.length] === '/' ? publicPath : publicPath + '/';
     let local = localPath;
     if(local[0] === '/'){

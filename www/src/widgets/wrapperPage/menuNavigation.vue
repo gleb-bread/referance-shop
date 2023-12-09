@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer
-        v-model:model-value="showNavigation"
+        v-model:model-value="getShowNavigation"
         color="secondary">
         <v-list-item title="Навигация"></v-list-item>
         <v-divider></v-divider>
@@ -20,7 +20,7 @@
     
 import { defineComponent } from 'vue';
 import * as HelperCookie from '@/shared/helpers/helperCookie';
-import { getCorrectURL } from '@/shared/helpers/helperAPI';
+import { getCurrectURL } from '@/shared/helpers/helperAPI';
 import axios from 'axios';
 import { v4 } from 'uuid';
     
