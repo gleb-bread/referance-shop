@@ -17,6 +17,7 @@ export interface MenuState {
     menuNavigationShow: boolean,
     subcategoriesShow: boolean,
     showSubcategoriesBtn: boolean,
+    subcategoriesList: string[],
 }
 
 export const State: MenuState = {
@@ -24,4 +25,5 @@ export const State: MenuState = {
     menuNavigationShow: false,
     subcategoriesShow: false,
     showSubcategoriesBtn: false,
+    subcategoriesList: [] as string[],
 }

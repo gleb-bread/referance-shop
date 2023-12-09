@@ -73,9 +73,8 @@ export const actions = {
     }
 }
 
-function getJSONPasrsingObject(defaultData: string){
-    
-    let dataWithKeys = JSON.parse(defaultData) as ParserProductsFirstJSONParse[];
+function getJSONPasrsingObject(defaultData: unknown){
+    let dataWithKeys = defaultData as ParserProductsFirstJSONParse[];
     dataWithKeys.forEach(element => {
         (<Array<keyof ParserProductsType>>Object.keys(element)).forEach((key) => {
             if(key == 'characteristics' || key == 'images' || key == 'variants'){

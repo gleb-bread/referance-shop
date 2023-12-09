@@ -15,5 +15,9 @@ export const actions = {
 
     setMenuSubcategoriesBtn(context: MenuState, flag: boolean){
         context.showSubcategoriesBtn = flag;
+    },
+
+    setSubcategoriesList(context: MenuState, listSubcategories: string[]){
+        context.subcategoriesList = listSubcategories;
     }
 }

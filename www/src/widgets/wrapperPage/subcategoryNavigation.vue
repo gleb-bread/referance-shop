@@ -3,15 +3,15 @@
         location="right"
         v-model:model-value="getShowSubcategories"
         color="secondary">
-        <v-list-item title="Подкатегории"></v-list-item>
+        <v-list-item>
+            <span class="text-subtitle-1 font-weight-bold">Подкатегории</span>
+        </v-list-item>
         <v-divider></v-divider>
         <template
-            v-for="navigation in navigations">
+            v-for="subcategory in getSubcategoriesList">
             <v-list-item 
-            :to="navigation.link"
-            :prepend-icon="navigation.prependIcon"
             link>
-            {{ navigation.text }}
+            {{ subcategory }}
         </v-list-item>
         </template>
     </v-navigation-drawer>
@@ -21,6 +21,7 @@
     
 import { defineComponent } from 'vue';
 import { useMenuStore } from '@/app/stores/menu';
+import { toHandlers } from 'vue';
     
 export default defineComponent({
     
@@ -33,6 +34,10 @@ export default defineComponent({
             set(flag: boolean){
                 this.menuStore.setMenuSuncategoriesShow(this.menuStore, flag);
             }
+        },
+
+        getSubcategoriesList(){
+            return this.menuStore.getSubcategoriesList;
         }
     },
     

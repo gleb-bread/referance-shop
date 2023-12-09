@@ -1,7 +1,7 @@
 export type ParserProductsFilter = {
-    page: number,
-    category: string,
-    subcategory: string,
+    page?: number,
+    category?: string,
+    subcategory?: string,
 }
 
 

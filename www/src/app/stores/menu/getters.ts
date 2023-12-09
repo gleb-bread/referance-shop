@@ -15,5 +15,9 @@ export const getters = {
 
     getMenuSubcategoriesBtn(state: MenuState){
         return state.showSubcategoriesBtn;
-    }
+    },
+
+    getSubcategoriesList(state: MenuState){
+        return state.subcategoriesList;
+    }   
 }

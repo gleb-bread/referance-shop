@@ -7,10 +7,10 @@
         <template
             v-for="navigation in navigations">
             <v-list-item 
-            :to="navigation.link"
-            :prepend-icon="navigation.prependIcon"
-            link>
-            {{ navigation.text }}
+                :to="navigation.link"
+                :prepend-icon="navigation.prependIcon"
+                link>
+                {{ navigation.text }}
         </v-list-item>
         </template>
     </v-navigation-drawer>
