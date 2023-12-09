@@ -64,17 +64,6 @@ export default defineComponent({
             menuStore: useMenuStore(),
             
             runtimeConfig: useRuntimeConfig(),
-
-            values: [
-                {
-                    img: 'https://drive.google.com/uc?export=view&id=1txxr0YFoCnjr9nmpxpRFMCGiL2FtrBO9',
-                    title: 'Кофе'
-                }, 
-                {
-                    img: 'https://drive.google.com/uc?export=view&id=1E0Nbjj4lkc7bYkIUrDotkIPei03vfUFy',
-                    title:'Выпечка'
-                }
-            ],
         };
     },
     
