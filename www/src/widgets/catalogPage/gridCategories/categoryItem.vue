@@ -2,6 +2,8 @@
     <v-card
         v-if="categoryTitle && categoryImg"
         @click.stop="handlerClickCategory(categoryTitle)"
+        @mouseover.stop="isHover = true"
+        @mouseleave.stop="isHover = false"
         class="pa-0 h-100 d-flex flex-column">
         <v-card-title  
             :class="{'pa-0': categoryImg}">
@@ -20,7 +22,11 @@
         </v-card-title>
         <v-card-text
             class="pt-2">
-            <h2 class="pt-10 text-h5 d-block text-center font-weight-medium h-100 w-100">
+            <h2 class="pt-10 text-h5 d-block text-center font-weight-medium h-100 w-100 transition"
+                :class="{
+                    'text-primary': isHover,
+                    'text-secondary': !isHover,
+                }">
                 {{ categoryTitle ? categoryTitle : 'Другое' }}
             </h2>
         </v-card-text>
@@ -52,12 +58,12 @@ export default defineComponent({
     },
     
     computed: {
-
     },
     
     data() {
         return {
             parserProducts: useParserProductsStore(),
+            isHover: false,
         };
     },
     
@@ -74,4 +80,10 @@ export default defineComponent({
 </script>
     
 <style scoped lang='scss'>
+
+.transition{
+    transition-property: all;
+    transition-duration: .2s;
+}
+
 </style>
