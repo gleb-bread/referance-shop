@@ -1,7 +1,7 @@
 <template>
     <v-virtual-scroll
         class="pa-10"
-        height="calc(100vh-64px)"
+        height="calc(100vh - 64px)"
         :items="Helper.chunk<string>(Object.keys(getImageCategories), currectCell.cells)">
         <template #default="{ item }">
             <v-row>
@@ -10,7 +10,7 @@
                     v-for="categoryKey in item">
                     <category-item
                         :category-img="getImageCategories[categoryKey]"
-                        :category-title="categoryKey">
+                        :category-title="categoryKey ? categoryKey : 'Другое'">
                     </category-item>
                 </v-col>
             </v-row>

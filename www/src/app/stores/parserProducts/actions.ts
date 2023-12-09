@@ -29,6 +29,12 @@ export const actions = {
         
         axios.get(getCurrectURL(`api/parser_products/categories`),{params: data}).then(response => {
             let categories = response.data;
+            Object.keys(categories).forEach(key => {
+                if(!key){
+                    delete categories[key];
+                }
+            });
+
             context.categories = categories;
             context.requestObserver.setLoading('loadingCategory', false);
             context.requestObserver.setError('errorCategory', false);
@@ -45,6 +51,13 @@ export const actions = {
 
         axios.get(getCurrectURL(`api/parser_products/images`),{params: data}).then(response => {
             let images = response.data;
+
+            Object.keys(images).forEach((key: string) => {
+                if(!key || !images[key]){
+                    delete images[key];
+                }
+            })
+
             context.imagesForCategory = images; 
 
             context.requestObserver.setLoading('loadingImg', false);
