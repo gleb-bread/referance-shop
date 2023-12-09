@@ -43,7 +43,7 @@
                 class="d-flex align-center justify-end text-end">
                 <span
                     class="text-error">
-                    {{ ShopHelper.convertMoneyTypeWithoutRuble(String(productItem.price)) + ' руб.'}}
+                    {{ Helper.convertMoneyTypeWithoutRuble(String(productItem.price)) + ' руб.'}}
                 </span>
             </div>
         </v-card-actions>
@@ -55,7 +55,7 @@
 import { defineComponent } from 'vue';
 import { ParserProductsType } from '@/app/stores/types';
 import { PropType } from 'vue';
-import * as ShopHelper from '~/shared/helpers/textHelper';
+import * as Helper from '@/shared/helpers/helper';
     
 export default defineComponent({
     props: {
@@ -75,7 +75,7 @@ export default defineComponent({
     
     data() {
         return {
-            ShopHelper: ShopHelper
+            Helper: Helper
         };
     },
     
