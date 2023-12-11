@@ -37,9 +37,10 @@
             class="d-flex justify-space-between">
             <div>
                 <v-btn 
-                    color="primary"
-                    :to="`/product/${productItem.id}`">Купить</v-btn>
-                <v-btn color="secondary">Подробнее</v-btn>
+                    color="primary">Купить</v-btn>
+                <v-btn 
+                    color="secondary"
+                    :to="`/product/${productItem.id}`">Подробнее</v-btn>
             </div>
             <div
                 class="d-flex align-center justify-end text-end">
