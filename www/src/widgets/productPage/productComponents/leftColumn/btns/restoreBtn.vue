@@ -1,14 +1,14 @@
 <template>
     <v-btn
-        color="primary"
+        color="secondary"
         :variant="'text'">
-            Купить
+            Сбросить
     </v-btn>
 </template>
-
 <script lang='ts'>
     
 import { defineComponent } from 'vue';
+import { PropType } from 'vue';
     
 export default defineComponent({
     
