@@ -28,6 +28,13 @@
 import { defineComponent } from 'vue';
     
 export default defineComponent({
+
+    props: {
+        countClear: {
+            type: Number,
+            required: true,
+        }
+    },
     
     emits: {
         
@@ -74,6 +81,12 @@ export default defineComponent({
     components: {
         
     },
+
+    watch: {
+        countClear: function(newVal: number){
+            this.valueProduct = '0';
+        }
+    }
 });
 </script>
     

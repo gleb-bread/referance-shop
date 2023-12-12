@@ -1,5 +1,6 @@
 <template>
     <v-btn
+        @click.stop="$emit('handlerClearStore', true)"
         color="secondary"
         :variant="'text'">
             Сбросить
@@ -13,7 +14,7 @@ import { PropType } from 'vue';
 export default defineComponent({
     
     emits: {
-        
+        'handlerClearStore': (flag: boolean) => true
     },
     
     computed: {
