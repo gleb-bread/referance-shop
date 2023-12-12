@@ -28,6 +28,27 @@ export const actions = {
         })
     },
 
+    async setParsertProductsById(context: ParserProductsState, idProduct: number){
+        context.requestObserver.setLoading('loadingProduct', true);
+        let data = getCurrectData({});
+
+        axios.get(getCurrectURL(`api/parser_products/${idProduct}`),{params: data}).then(response => {
+            let defaultData = getJSONPasrsingObject(response.data as unknown as string);
+            context.products = defaultData;
+            if(defaultData?.length >= 100){
+                context.isLastPage = false;
+            } else {
+                context.isLastPage = true;
+            }
+            context.page = 1;
+            context.requestObserver.setLoading('loadingProduct', false);
+            context.requestObserver.setError('errorProduct', false);
+        }).catch(responce => {
+            context.requestObserver.setLoading('loadingProduct', false);
+            context.requestObserver.setError('errorProduct', false);
+        })
+    },  
+
     async updateParserProducts(context: ParserProductsState, params:ParserProductsFilter = {page: 1} as ParserProductsFilter){
         let data = getCurrectData(params);
 
@@ -102,15 +123,31 @@ export const actions = {
 }
 
 function getJSONPasrsingObject(defaultData: unknown){
-    let dataWithKeys = defaultData as ParserProductsFirstJSONParse[];
-    dataWithKeys.forEach(element => {
-        (<Array<keyof ParserProductsType>>Object.keys(element)).forEach((key) => {
+    let dataWithKeys = defaultData as ParserProductsFirstJSONParse[] | ParserProductsFirstJSONParse;
+
+    if(Array.isArray(defaultData)){
+        (<ParserProductsFirstJSONParse[]>dataWithKeys).forEach(element => {
+            (<Array<keyof ParserProductsType>>Object.keys(element)).forEach((key) => {
+                if(key == 'characteristics' || key == 'images' || key == 'variants'){
+                    if(Boolean(element[key])){
+                        element[key] = JSON.parse(<string> element[key]);
+                    }
+                }
+            })
+        });
+    } else {
+        (Object.keys(<ParserProductsFirstJSONParse> defaultData)).forEach((key) => {
             if(key == 'characteristics' || key == 'images' || key == 'variants'){
-                if(Boolean(element[key])){
-                    element[key] = JSON.parse(<string> element[key]);
+                if(Boolean((<ParserProductsFirstJSONParse> dataWithKeys)[key])){
+                    (<ParserProductsFirstJSONParse> dataWithKeys)[key] = JSON.parse(<string>(<ParserProductsFirstJSONParse> dataWithKeys)[key]);
                 }
             }
         })
-    });
+        //@ts-ignore
+        dataWithKeys = [<ParserProductsType>dataWithKeys] as ParserProductsType[];
+    }
+
+
+
     return dataWithKeys as ParserProductsType[];
 }

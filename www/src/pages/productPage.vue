@@ -1,86 +1,43 @@
 <template>
+    <template v-if="parserProductsStore.getLoading || parserProductsStore.getError">
+      <div
+        class="w-screen h-screen d-flex justify-center"
+        :class="{ 'align-center': !parserProductsStore.getError }">
+        <v-progress-circular
+          v-if="parserProductsStore.getLoading && !parserProductsStore.getError"
+          indeterminate
+          :size="58"
+          :width="8"
+          color="primary">
+        </v-progress-circular>
+        <v-alert
+            v-if="parserProductsStore.getError"
+            max-height="100px"
+            type="error"
+            :rounded="false"
+            title="Ошибка"
+            text="Произошла ошибка загрузки">
+        </v-alert>
+      </div>
+  </template>
+  <template v-else>
     <v-card
         height="calc(100vh - 64px)"
+        class="overflow-auto"
         rounded="none">
         <v-card-text>
-            <v-container>
-                <h1 class="text-h5 mb-5">{{ getProductInfo?.title }}</h1>
-                <v-row>
-                    <v-col>
-                        <v-row>
-                            <v-col>
-                                <v-lazy
-                                    height="300">
-                                    <v-img
-                                        width="auto"
-                                        aspect-ratio="16/9"
-                                        :src="getProductInfo?.images?.img1">
-                                    </v-img>
-                                </v-lazy>
-                            </v-col>
-                            <v-col>
-                                <v-row>
-                                    <v-col>
-                                        <div
-                                            class="border d-flex">
-                                            <v-btn
-                                                color="primary"
-                                                :variant="'text'">
-                                                +
-                                            </v-btn>
-                                            <v-text-field
-                                                class="mx-width-150"
-                                                :variant="'underlined'">
-                                            </v-text-field>
-                                            <v-btn
-                                                color="primary"
-                                                :variant="'text'">
-                                                -
-                                            </v-btn>
-                                        </div>
-                                    </v-col>
-                                </v-row>
-                                <v-row>
-                                    <v-col>
-                                        <v-btn
-                                            color="primary"
-                                            :variant="'text'">
-                                                Купить
-                                        </v-btn>
-                                    </v-col>
-                                </v-row>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                    <v-col>
-                        <span class="text-h6">Характиристики</span>
-                        <v-list>
-                            <template v-for="haracteristic, key in getProductInfo?.characteristics">
-                                <v-list-item
-                                    width="auto"
-                                    height="auto">
-                                    <v-row>
-                                        <v-col>
-                                            {{ key }}
-                                        </v-col>
-                                        <v-col>
-                                            {{ haracteristic }}
-                                        </v-col>
-                                    </v-row>
-                                </v-list-item>
-                            </template>
-                        </v-list>
-                    </v-col>
-                </v-row>
-            </v-container>
+            <product-container>
+            </product-container>
         </v-card-text>
     </v-card>
+  </template>
 </template>
 
 <script lang='ts'>
     
 import { defineComponent } from 'vue';
 import { useParserProductsStore } from '@/app/stores/parserProducts';
+import productContainer from '@/widgets/productPage/productContainer.vue';
     
 export default defineComponent({
     
@@ -89,14 +46,6 @@ export default defineComponent({
     },
     
     computed: {
-        getProductInfo(){
-            let product = this.parserProductsStore.getParserProducts?.find(item => item.id === <number> Number(this.$route.params.id));
-            if(product){
-                return product;
-            } else {
-                return product;
-            }
-        }
     },
     
     data() {
@@ -110,13 +59,11 @@ export default defineComponent({
     },
     
     components: {
-        
+        productContainer
     },
 });
 </script>
     
 <style scoped lang='scss'>
-.mx-width-150{
-    max-width: 150px;
-}
+
 </style>
