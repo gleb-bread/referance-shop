@@ -19,5 +19,9 @@ export const getters = {
 
     getSubcategoriesList(state: MenuState){
         return state.subcategoriesList;
-    }   
+    },
+    
+    getCartShow(state: MenuState){
+        return state.cartShow;
+    }
 }

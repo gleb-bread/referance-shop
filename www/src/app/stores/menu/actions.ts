@@ -10,6 +10,7 @@ export const actions = {
     },
 
     setMenuSuncategoriesShow(context: MenuState, flag: boolean){
+        context.cartShow = false;
         context.subcategoriesShow = flag;
     },
 
@@ -19,5 +20,10 @@ export const actions = {
 
     setSubcategoriesList(context: MenuState, listSubcategories: string[]){
         context.subcategoriesList = listSubcategories;
+    },
+
+    setCartShow(context: MenuState, flag: boolean){
+        context.subcategoriesShow = false;
+        context.cartShow = flag;
     }
 }

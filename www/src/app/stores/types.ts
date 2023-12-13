@@ -120,3 +120,21 @@ export type CookieOptions = {
     maxAge?: number | string,
     sameSite?:  boolean | "lax" | "strict" | "none",
 }
+
+// export type CartStatuses = 'create' | 'handle' | 'assembly' | 'delivery' | 'success' | 'disabled';
+
+// export type CartSubstatus = 'paid';
+
+// export type CartTypeDisabled = 'defect' | 'time' | 'reconsider' | 'another';
+
+export type CartProductItem = ParserProductsType & {count: number}
+
+export type CartProductFilter = {
+    page: number,
+    cart_uid?: number,
+    cart_product_id?: number,
+    cart_is_parsing?: number,
+    cart_status_id?: number,
+    cart_order_id?: number,
+    cart_archive?: boolean,
+}

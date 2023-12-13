@@ -16,6 +16,10 @@
             @click.stop="getShowSubcategories = !getShowSubcategories"
             icon="mdi-format-list-bulleted">
         </v-btn>
+        <v-btn 
+            @click.stop="getCartShow = !getCartShow"
+            icon="mdi-cart">
+        </v-btn>
     </v-app-bar>
 </template>
 
@@ -41,6 +45,16 @@ export default defineComponent({
             },
             set(flag: boolean){
                 this.menuStore.setMenuSuncategoriesShow(this.menuStore, flag);
+            }
+        },
+
+        getCartShow: {
+            get(){
+                return this.menuStore.getCartShow;
+            },
+
+            set(flag: boolean){
+                this.menuStore.setCartShow(this.menuStore, flag);
             }
         },
 

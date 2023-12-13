@@ -17,6 +17,7 @@ export interface MenuState {
     menuNavigationShow: boolean,
     subcategoriesShow: boolean,
     showSubcategoriesBtn: boolean,
+    cartShow: boolean,
     subcategoriesList: string[],
 }
 
@@ -25,5 +26,6 @@ export const State: MenuState = {
     menuNavigationShow: false,
     subcategoriesShow: false,
     showSubcategoriesBtn: false,
+    cartShow: false,
     subcategoriesList: [] as string[],
 }
