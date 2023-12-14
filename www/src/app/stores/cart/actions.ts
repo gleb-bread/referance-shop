@@ -1,5 +1,5 @@
 import { CartState } from './state';
-import { CartProductItem, CartProductFilter } from '../types';
+import { CartProductItem, CartProductFilter, CartAddType } from '../types';
 import { getCurrectData } from "../options";
 import { getCurrectURL } from "@/shared/helpers/helperAPI";
 import axios from "axios";
@@ -27,4 +27,30 @@ export const actions = {
             context.ObserverRequest.setError('errorLoading', false);
         })
     },
+
+    async addProductToCart(context: CartState, params: CartAddType){
+        let url = getCurrectURL('api/cart');
+        let data = getCurrectData(params);
+        data = JSON.stringify(data);
+
+        let config = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        }
+
+        return await axios.post(url, data, config).then(response => {
+            let product = response.data as CartProductItem;
+
+            if(!context.products){
+                context.products = [];
+            }
+
+            context.products.push(product);            
+
+            return true;
+        }).catch(response => {
+            return false;
+        })
+    }
 };

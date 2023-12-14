@@ -138,3 +138,9 @@ export type CartProductFilter = {
     cart_order_id?: number,
     cart_archive?: boolean,
 }
+
+export type CartAddType = {
+    cart_product_id: number,
+    cart_is_parsing: boolean,
+    cart_count: number,
+}

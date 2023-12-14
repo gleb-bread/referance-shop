@@ -79,21 +79,52 @@ import { ParserProductsType } from '@/app/stores/types';
 import { PropType } from 'vue';
 import * as Helper from '@/shared/helpers/helper';
 import counterBtn from './components/counterBtn.vue';
+import { useCartStore } from '@/app/stores/cart';
+import { CartAddType } from '@/app/stores/types';
     
 export default defineComponent({
     props: {
         productItem: {
             type: Object as PropType<ParserProductsType>,
             required: true,
+        },
+
+        answerRequest: {
+            type: null as unknown as PropType<null | boolean>,
+            required: true,
+        },
+
+        textAnswer: {
+            type: String,
+            required: true,
         }
     },
     
     emits: {
-        
+        'update:answerRequest': (flag: boolean) => true,
+        'update:textAnswer': (str: string) => true
     },
     
     computed: {
-        
+        getAnswerRequest: {
+            get(){
+                return this.answerRequest;
+            },
+
+            set(flag: boolean){
+                this.$emit('update:answerRequest', flag);
+            }
+        },
+
+        getTextAnswer: {
+            get(){
+                return this.textAnswer;
+            },
+
+            set(str: string){
+                this.$emit('update:textAnswer', str);
+            }
+        }
     },
     
     data() {
@@ -102,11 +133,29 @@ export default defineComponent({
 
             defaultCount: '0',
             showCounter: false,
+            cartStore: useCartStore(),
         };
     },
     
     methods: {
-        handlerAddToCart(idProduct: number){
+        async handlerAddToCart(idProduct: number){
+            if(this.showCounter){
+                let productToAdd = {
+                    cart_count: Number(this.defaultCount),
+                    cart_is_parsing: true,
+                    cart_product_id: this.productItem.id
+                } as CartAddType;
+
+                let result = await this.cartStore.addProductToCart(this.cartStore, productToAdd);
+
+                if(result){
+
+                } else {
+                    this.getAnswerRequest = false;
+                    this.getTextAnswer = 'Не удалось добавить товар в корзину';
+                }
+            }
+
             this.showCounter = true;
         }
     },

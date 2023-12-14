@@ -34,13 +34,20 @@
                     :cols="currectCell.size"
                     v-for="itemProduct in item">
                     <shop-item
-                        :product-item="itemProduct">
+                        :product-item="itemProduct"
+                        v-model:answer-request="answerRequst"
+                        v-model:text-answer="textAnswer">
                     </shop-item>
                 </v-col>
             </v-row>
         </template>
     </v-virtual-scroll>
   </template>
+  <modal-list
+    :response-request="answerRequst"
+    :text-answer="textAnswer"
+    @restore-request="handlerRestoreRequest">
+  </modal-list>
 </template>
 
 <script lang='ts'>
@@ -51,6 +58,7 @@ import { useMenuStore } from '@/app/stores/menu';
 import { ParserProductsType } from '@/app/stores/types';
 import * as Helper from '@/shared/helpers/helper';
 import shopItem from '@/widgets/categoryPage/shopItem.vue';
+import modalList from '@/widgets/wrapperPage/modalList.vue';
     
 export default defineComponent({
     
@@ -86,6 +94,9 @@ export default defineComponent({
 
             currectCategory: '',
             currectSubcategory: '',
+            
+            answerRequst: null as null | boolean,
+            textAnswer: '',
 
             isUpdate: false,
 
@@ -143,11 +154,17 @@ export default defineComponent({
             this.isUpdate = true;
             setTimeout(() => {this.isUpdate = false}, 2000);
            } 
-        }
+        },
+
+        handlerRestoreRequest() {
+            this.answerRequst = null;
+            this.textAnswer = "";
+        },
     },
     
     components: {
         shopItem,
+        modalList
     },
 
     async created(){
