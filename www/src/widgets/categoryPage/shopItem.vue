@@ -33,21 +33,40 @@
                 </v-list-item>
             </v-list> -->
         </v-card-text>
-        <v-card-actions
-            class="d-flex justify-space-between">
+        <v-card-actions>
             <div>
-                <v-btn 
-                    color="primary">Купить</v-btn>
-                <v-btn 
-                    color="secondary"
-                    :to="`/product/${productItem.id}`">Подробнее</v-btn>
-            </div>
-            <div
-                class="d-flex align-center justify-end text-end">
-                <span
-                    class="text-error">
-                    {{ Helper.convertMoneyTypeWithoutRuble(String(productItem.price ? productItem.price : 0)) + ' руб.'}}
-                </span>
+                <v-scroll-y-transition>
+                    <v-row
+                        v-if="showCounter">
+                        <v-col>
+                            <counter-btn
+                                v-model:count-product="defaultCount">
+                            </counter-btn>
+                        </v-col>
+                    </v-row>
+                </v-scroll-y-transition>
+                <v-row>
+                    <v-col cols="4">
+                        <v-btn 
+                            @click.stop="handlerAddToCart(productItem.id)"
+                            color="primary">
+                            Купить
+                        </v-btn>
+                    </v-col>
+                    <v-col cols="4">
+                        <v-btn 
+                            color="secondary"
+                            :to="`/product/${productItem.id}`">Подробнее</v-btn>
+                        </v-col>
+                    <v-col 
+                        cols="4"
+                        class="d-flex align-center">
+                        <span
+                            class="text-error">
+                            {{ Helper.convertMoneyTypeWithoutRuble(String(productItem.price ? productItem.price : 0)) + ' руб.'}}
+                        </span>
+                    </v-col>
+                </v-row>
             </div>
         </v-card-actions>
     </v-card>
@@ -59,6 +78,7 @@ import { defineComponent } from 'vue';
 import { ParserProductsType } from '@/app/stores/types';
 import { PropType } from 'vue';
 import * as Helper from '@/shared/helpers/helper';
+import counterBtn from './components/counterBtn.vue';
     
 export default defineComponent({
     props: {
@@ -78,17 +98,23 @@ export default defineComponent({
     
     data() {
         return {
-            Helper: Helper
+            Helper: Helper,
+
+            defaultCount: '0',
+            showCounter: false,
         };
     },
     
     methods: {
-        
+        handlerAddToCart(idProduct: number){
+            this.showCounter = true;
+        }
     },
     
     components: {
-        
+        counterBtn
     },
+
 });
 </script>
     

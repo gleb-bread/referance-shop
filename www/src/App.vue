@@ -6,6 +6,8 @@
     </menu-navigation>
     <subcategory-navigation>
     </subcategory-navigation>
+    <cart-navigation>
+    </cart-navigation>
     <v-main>
       <router-view/>
     </v-main>
@@ -17,6 +19,7 @@ import { defineComponent } from 'vue';
 import headerMenu from '@/widgets/wrapperPage/headerMenu.vue';
 import menuNavigation from './widgets/wrapperPage/menuNavigation.vue';
 import subcategoryNavigation from './widgets/wrapperPage/subcategoryNavigation.vue';
+import cartNavigation from './widgets/wrapperPage/cartNavigation.vue';
 
 export default defineComponent({
   name: 'App',
@@ -30,7 +33,8 @@ export default defineComponent({
   components: {
     headerMenu,
     menuNavigation,
-    subcategoryNavigation
+    subcategoryNavigation,
+    cartNavigation
   }
 
 })

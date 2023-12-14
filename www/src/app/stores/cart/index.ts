@@ -5,7 +5,7 @@ import { actions } from './actions';
 import { CartState } from './state';
 
 
-export const useCartStore = defineStore('menu', {
+export const useCartStore = defineStore('cart', {
     state: (): CartState => {
         return State;
     },

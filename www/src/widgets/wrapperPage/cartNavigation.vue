@@ -1,18 +1,21 @@
 <template>
     <v-navigation-drawer
         v-model="getCartShow"
+        location="right"
         color="secondary">
         <v-list-item title="Корзина"></v-list-item>
         <v-divider></v-divider>
-        <!-- <template
-            v-for="navigation in navigations">
+        <template
+            v-if="getCartProducts.length"
+            v-for="product in getCartProducts">
             <v-list-item 
-                :to="navigation.link"
-                :prepend-icon="navigation.prependIcon"
                 link>
-                {{ navigation.text }}
-        </v-list-item>
-        </template> -->
+                {{ product.brand }}
+            </v-list-item>
+        </template>
+        <template v-else>
+            <div class="pt-6 pl-2">Пока здесь ничего нет</div>
+        </template>
     </v-navigation-drawer>
 </template>
 
@@ -21,6 +24,7 @@
 import { defineComponent } from 'vue';
 import { PropType } from 'vue';
 import { useMenuStore } from '@/app/stores/menu';
+import { useCartStore } from '@/app/stores/cart';
     
 export default defineComponent({
     emits: {
@@ -30,11 +34,19 @@ export default defineComponent({
     computed: {
         getCartShow: {
             get(){
-                console.log(this.menuStore.getCartShow);
                 return this.menuStore.getCartShow;
             },
             set(flag: boolean){
                 this.menuStore.setCartShow(this.menuStore, flag);
+            }
+        },
+
+        getCartProducts: {
+            get(){
+                return this.cartStore.getProducts;
+            },
+            set(){
+
             }
         }
     },
@@ -42,6 +54,7 @@ export default defineComponent({
     data() {
         return {
             menuStore: useMenuStore(),
+            cartStore: useCartStore(),
         };
     },
     
@@ -52,6 +65,11 @@ export default defineComponent({
     components: {
         
     },
+
+    async created(){
+        await this.cartStore.setProducts(this.cartStore, {page: 1});
+    }
+
 });
 </script>
     
