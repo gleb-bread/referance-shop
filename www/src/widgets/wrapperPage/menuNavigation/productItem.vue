@@ -1,22 +1,21 @@
 <template>
     <v-card>
         <v-card-title primary-title>
-            {{ productItem.title }}
+            <h6 class="text-subtitle-2 ws-initial">{{ productItem.title }}</h6>
         </v-card-title>
         <v-card-text>
             <v-row>
-                <v-col
-                    v-if="productItem.images"
-                    class="max-w-50">
-                    <v-img
-                        width="auto"
-                        cover
-                        :src="productItem.images['img1']">
-                    </v-img>
-                </v-col>
-                <v-col>
-                    
-                </v-col>
+                <header-item
+                    :count-cart="productItem.count_cart"
+                    :product-images="productItem.images"
+                    :product-price="productItem.price">
+                </header-item>
+            </v-row>
+            <v-row>
+                <btns-item
+                    :count-items="productItem.count_cart"
+                    :id-cart="productItem.cart_id">
+                </btns-item>
             </v-row>
         </v-card-text>
     </v-card>
@@ -27,6 +26,9 @@
 import { defineComponent } from 'vue';
 import { PropType } from 'vue';
 import { CartProductItem } from '@/app/stores/types';
+import * as Helper from '@/shared/helpers/helper';
+import headerItem from './productItem/headerItem.vue';
+import btnsItem from './productItem/btnsItem.vue';
     
 export default defineComponent({
     props: {
@@ -46,7 +48,7 @@ export default defineComponent({
     
     data() {
         return {
-            
+            Helper: Helper
         };
     },
     
@@ -55,13 +57,14 @@ export default defineComponent({
     },
     
     components: {
-        
+        headerItem,
+        btnsItem
     },
 });
 </script>
     
 <style scoped lang='scss'>
-.max-w-50{
-    max-width: 50px;
+.ws-initial{
+    white-space: initial;
 }
 </style>

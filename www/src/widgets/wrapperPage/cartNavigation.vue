@@ -5,12 +5,27 @@
         color="secondary">
         <v-list-item title="Корзина"></v-list-item>
         <v-divider></v-divider>
+        <template v-if="cartStore.getLoading">
+            <div class="w-screen h-screen d-flex justify-center align-cente">
+                <v-progress-circular
+                    indeterminate
+                    :size="58"
+                    :width="8"
+                    class="mt-10"
+                    color="info">
+                </v-progress-circular>
+            </div>
+        </template>
+        <template v-else-if="cartStore.getError">
+            <div class="pt-6 pl-2">Пока здесь ничего нет</div>
+        </template>
         <template
-            v-if="getCartProducts.length"
+            v-else-if="getCartProducts.length"
             v-for="product in getCartProducts">
-            <v-list-item 
-                link>
-                {{ product.brand }}
+            <v-list-item>
+                <product-item
+                    :product-item="product">
+                </product-item>
             </v-list-item>
         </template>
         <template v-else>
@@ -25,6 +40,7 @@ import { defineComponent } from 'vue';
 import { PropType } from 'vue';
 import { useMenuStore } from '@/app/stores/menu';
 import { useCartStore } from '@/app/stores/cart';
+import productItem from './menuNavigation/productItem.vue';
     
 export default defineComponent({
     emits: {
@@ -63,11 +79,12 @@ export default defineComponent({
     },
     
     components: {
-        
+        productItem
     },
 
     async created(){
         await this.cartStore.setProducts(this.cartStore, {page: 1});
+        await this.cartStore.setCountCart(this.cartStore);
     }
 
 });

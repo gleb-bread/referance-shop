@@ -34,20 +34,13 @@
                     :cols="currectCell.size"
                     v-for="itemProduct in item">
                     <shop-item
-                        :product-item="itemProduct"
-                        v-model:answer-request="answerRequst"
-                        v-model:text-answer="textAnswer">
+                        :product-item="itemProduct">
                     </shop-item>
                 </v-col>
             </v-row>
         </template>
     </v-virtual-scroll>
   </template>
-  <modal-list
-    :response-request="answerRequst"
-    :text-answer="textAnswer"
-    @restore-request="handlerRestoreRequest">
-  </modal-list>
 </template>
 
 <script lang='ts'>
@@ -94,9 +87,6 @@ export default defineComponent({
 
             currectCategory: '',
             currectSubcategory: '',
-            
-            answerRequst: null as null | boolean,
-            textAnswer: '',
 
             isUpdate: false,
 
@@ -154,11 +144,6 @@ export default defineComponent({
             this.isUpdate = true;
             setTimeout(() => {this.isUpdate = false}, 2000);
            } 
-        },
-
-        handlerRestoreRequest() {
-            this.answerRequst = null;
-            this.textAnswer = "";
         },
     },
     

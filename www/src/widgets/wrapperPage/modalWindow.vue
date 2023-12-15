@@ -89,7 +89,7 @@
   }
   
   .z-index-1000000{
-    z-index: 1000000000;
+    z-index: 1000000000000000 !important;
   }
   </style>
   

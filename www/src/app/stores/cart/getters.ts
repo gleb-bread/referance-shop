@@ -11,5 +11,9 @@ export const getters = {
     
     getError(state: CartState){
         return state.ObserverRequest.getMixError('errorLoading');
+    },
+
+    getCountCart(state: CartState){
+        return state.countCart;
     }
 }

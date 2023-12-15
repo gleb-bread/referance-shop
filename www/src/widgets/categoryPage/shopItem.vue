@@ -81,6 +81,7 @@ import * as Helper from '@/shared/helpers/helper';
 import counterBtn from './components/counterBtn.vue';
 import { useCartStore } from '@/app/stores/cart';
 import { CartAddType } from '@/app/stores/types';
+import { useRequestHandler } from '@/app/stores/requestHandler';
     
 export default defineComponent({
     props: {
@@ -88,43 +89,12 @@ export default defineComponent({
             type: Object as PropType<ParserProductsType>,
             required: true,
         },
-
-        answerRequest: {
-            type: null as unknown as PropType<null | boolean>,
-            required: true,
-        },
-
-        textAnswer: {
-            type: String,
-            required: true,
-        }
     },
     
     emits: {
-        'update:answerRequest': (flag: boolean) => true,
-        'update:textAnswer': (str: string) => true
     },
     
     computed: {
-        getAnswerRequest: {
-            get(){
-                return this.answerRequest;
-            },
-
-            set(flag: boolean){
-                this.$emit('update:answerRequest', flag);
-            }
-        },
-
-        getTextAnswer: {
-            get(){
-                return this.textAnswer;
-            },
-
-            set(str: string){
-                this.$emit('update:textAnswer', str);
-            }
-        }
     },
     
     data() {
@@ -134,6 +104,7 @@ export default defineComponent({
             defaultCount: '0',
             showCounter: false,
             cartStore: useCartStore(),
+            handlerRequest: useRequestHandler(),
         };
     },
     
@@ -151,8 +122,8 @@ export default defineComponent({
                 if(result){
 
                 } else {
-                    this.getAnswerRequest = false;
-                    this.getTextAnswer = 'Не удалось добавить товар в корзину';
+                    this.handlerRequest.setAnswerRequest(this.handlerRequest, false);
+                    this.handlerRequest.setTextRequest(this.handlerRequest, 'Не удалось добавить товар в корзину');
                 }
             }
 

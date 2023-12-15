@@ -56,6 +56,7 @@ export type ParserProductsType = {
     date_add: string,
     date_edit: string,
     bitrix_views: number | null,
+    cart_id: number,
 }
 
 export type ParserProductsFirstJSONParse = {
@@ -127,7 +128,7 @@ export type CookieOptions = {
 
 // export type CartTypeDisabled = 'defect' | 'time' | 'reconsider' | 'another';
 
-export type CartProductItem = ParserProductsType & {count: number}
+export type CartProductItem = ParserProductsType & {count_cart: number}
 
 export type CartProductFilter = {
     page: number,

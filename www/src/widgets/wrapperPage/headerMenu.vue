@@ -17,8 +17,21 @@
             icon="mdi-format-list-bulleted">
         </v-btn>
         <v-btn 
-            @click.stop="getCartShow = !getCartShow"
-            icon="mdi-cart">
+            @click.stop="getCartShow = !getCartShow">
+            <v-fade-transition group>
+                <v-badge 
+                    v-if="cartStore.getCountCart"
+                    :key="1"
+                    :content="cartStore.getCountCart" 
+                    color="error">
+                    <v-icon>mdi-cart</v-icon>
+                </v-badge>
+                <v-icon 
+                    v-else
+                    :key="2">
+                    mdi-cart
+                </v-icon>
+            </v-fade-transition>
         </v-btn>
     </v-app-bar>
 </template>
@@ -27,6 +40,7 @@
     
 import { defineComponent } from 'vue';
 import { useMenuStore } from '@/app/stores/menu/index';
+import { useCartStore } from '@/app/stores/cart';
     
 export default defineComponent({
     computed: {
@@ -70,6 +84,7 @@ export default defineComponent({
     data() {
         return {
             menuStore: useMenuStore(),
+            cartStore: useCartStore(),
         };
     },
     

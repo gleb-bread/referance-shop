@@ -10,10 +10,7 @@ export async function init(){
 
     if(!userToken){
         userToken = v4();
-        setCookie('user_token', userToken, {
-            maxAge: 60 * 60 * 24 * 365,
-            httpOnly: true,
-        })
+        setCookie('user_token', userToken)
     }
     
     let data = {

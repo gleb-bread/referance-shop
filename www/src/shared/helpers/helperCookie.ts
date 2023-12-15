@@ -10,7 +10,6 @@ export const getCookie = function(name: string) {
 export const setCookie = function(name: string, value:any, options:CookieOptions = {}) {
 
     options = {
-      path: '/',
       ...options
     };
   

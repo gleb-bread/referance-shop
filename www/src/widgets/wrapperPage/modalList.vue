@@ -81,8 +81,8 @@
     max-width: 300px;
     min-width: 200px;
     position: fixed;
-    top: 10px;
-    right: 20px;
+    bottom: 10px;
+    left: 10px;
   }
   </style>
   

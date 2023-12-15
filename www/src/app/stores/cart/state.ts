@@ -9,6 +9,7 @@ export interface ParserProductsLoading {
 export interface CartState {
     products: CartProductItem[],
     ObserverRequest: ObserverRequest<ParserProductsLoading>,
+    countCart: number,
     isLastPage: boolean,
     page: number,
 }
@@ -16,6 +17,7 @@ export interface CartState {
 export const State: CartState = {
     products: [] as CartProductItem[],
     isLastPage: false,
+    countCart: 0,
     page: 1,
     ObserverRequest: new ObserverRequest<ParserProductsLoading>(),
 }
