@@ -112,6 +112,30 @@ export const actions = {
         }).catch(response => {
             return false;
         })
+    },
+
+    async dropCart(context: CartState){
+        let url = getCurrectURL(`api/cart/drop`);
+        let data = getCurrectData({'_method': 'patch'});
+        data = JSON.stringify(data);
+
+        let config = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        }
+
+        return await axios.post(url, data, config).then(response => {
+            if(response.data['success']) {
+                context.products = [];
+                this.setCountCart(context);
+                return true;
+            } else {
+                return false;
+            }
+        }).catch(response => {
+            return false;
+        })
     }
 };
 

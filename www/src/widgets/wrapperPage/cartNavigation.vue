@@ -32,8 +32,11 @@
             <div class="pt-6 pl-2">Пока здесь ничего нет</div>
         </template>
         <template v-slot:append>
-            <footer-navigation>
-            </footer-navigation>
+            <v-slide-y-reverse-transition>
+                <footer-navigation
+                    v-if="cartStore.getProducts.length">
+                </footer-navigation>
+            </v-slide-y-reverse-transition>
         </template>
     </v-navigation-drawer>
 </template>

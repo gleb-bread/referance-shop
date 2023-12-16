@@ -6,6 +6,7 @@
             Перейти к оформлению
         </v-btn>
         <v-btn
+            @click.stop="handlerDropCart"
             class="w-100"
             color="error">
             Очистить корзину
@@ -15,13 +16,12 @@
 
 <script lang='ts'>
     
-import { defineComponent } from 'vue';
+import { defineComponent, toHandlers } from 'vue';
 import { PropType } from 'vue';
+import { useCartStore } from '@/app/stores/cart';
+import { useRequestHandler } from '@/app/stores/requestHandler';
     
 export default defineComponent({
-    props: {
-        
-    },
     
     emits: {
         
@@ -33,12 +33,22 @@ export default defineComponent({
     
     data() {
         return {
-            
+            cartStore: useCartStore(),
+            requestHandler: useRequestHandler(),
         };
     },
     
     methods: {
-        
+        async handlerDropCart(){
+            let result = await this.cartStore.dropCart(this.cartStore);
+
+            if(result){
+
+            } else {
+                this.requestHandler.setAnswerRequest(this.requestHandler, false);
+                this.requestHandler.setTextRequest(this.requestHandler, 'Не удалось очистить корзину');
+            }
+        }
     },
     
     components: {
