@@ -31,6 +31,10 @@
         <template v-else>
             <div class="pt-6 pl-2">Пока здесь ничего нет</div>
         </template>
+        <template v-slot:append>
+            <footer-navigation>
+            </footer-navigation>
+        </template>
     </v-navigation-drawer>
 </template>
 
@@ -40,7 +44,8 @@ import { defineComponent } from 'vue';
 import { PropType } from 'vue';
 import { useMenuStore } from '@/app/stores/menu';
 import { useCartStore } from '@/app/stores/cart';
-import productItem from './menuNavigation/productItem.vue';
+import productItem from './cartNavigation/productItem.vue';
+import footerNavigation from './cartNavigation/footerNavigation.vue';
     
 export default defineComponent({
     emits: {
@@ -64,7 +69,7 @@ export default defineComponent({
             set(){
 
             }
-        }
+        },
     },
     
     data() {
@@ -79,7 +84,8 @@ export default defineComponent({
     },
     
     components: {
-        productItem
+        productItem,
+        footerNavigation
     },
 
     async created(){
