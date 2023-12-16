@@ -2,6 +2,7 @@
     <div>
         <v-btn 
             class="mb-2"
+            to="/orders"
             color="success">
             Перейти к оформлению
         </v-btn>

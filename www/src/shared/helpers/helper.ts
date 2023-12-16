@@ -36,3 +36,25 @@ export const getObjectWithExitingFields = function(data: any){
     });
     return data;
 }
+
+
+export const getZeroIfNumNotExist = function(value: any){
+    if(!value || isNaN(Number(value))){
+        return 0;
+    }
+    return value;
+}
+
+export const getOneIfNumNotExist = function(value: any){
+    if(!value || isNaN(Number(value))){
+        return 1;
+    }
+    return value;
+}
+
+export const getDashIfValNotExist = function(value: any){
+    if(!value){
+        return '-';
+    }
+    return String(value);
+}
