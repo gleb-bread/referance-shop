@@ -19,13 +19,14 @@
                 -
             </v-btn>
         </div>
-        <div>
+        <div
+            class="d-flex">
             <v-fade-transition group>
                 <v-btn
                     v-if="Number(getCurrectValue) > countItems"
                     @click.stop="handlerChangeCount"
                     color="success"
-                    class="w-100"
+                    class="w-70"
                     :key="1">
                     Добавить
                 </v-btn>
@@ -33,11 +34,21 @@
                     v-else-if="(Number(getCurrectValue) < countItems) && countItems"
                     @click.stop="handlerChangeCount"
                     color="error"
-                    class="w-100"
+                    class="w-70"
                     :key="2">
                     Уменьшить
                 </v-btn>
             </v-fade-transition>
+            <div
+                class="ms-auto">
+                <v-btn
+                    @click.stop="handlerDeleteItem" 
+                    rounded="lg"
+                    size="38"
+                    icon="mdi-trash-can"
+                    color="error">
+                </v-btn>
+            </div>
         </div>
     </v-col>
 </template>
@@ -128,12 +139,27 @@ export default defineComponent({
                     this.requestHandler.setTextRequest(this.requestHandler, 'Не удалось изменить значение в корзине');
                 }
             }
+        },
+
+        async handlerDeleteItem(){
+            let result = await this.cartStore.changeCount(this.cartStore, {cart_count: 0, cart_id: this.idCart});
+
+            if(!result){
+                this.requestHandler.setAnswerRequest(this.requestHandler, false);
+                this.requestHandler.setTextRequest(this.requestHandler, 'Не удалось удалить товар из корзины');
+            }
         }
     },
     
     components: {
         
     },
+
+    watch: {
+        countItems: function(newVal: number){
+            this.currectValue = '';
+        }
+    }
 });
 </script>
     
@@ -147,4 +173,5 @@ export default defineComponent({
         padding-left: 4px;
     }
 }
+
 </style>

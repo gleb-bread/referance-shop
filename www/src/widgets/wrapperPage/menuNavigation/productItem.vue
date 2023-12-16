@@ -67,4 +67,8 @@ export default defineComponent({
 .ws-initial{
     white-space: initial;
 }
+
+.min-w-70{
+    min-width: 70%;
+}
 </style>

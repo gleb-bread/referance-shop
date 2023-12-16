@@ -1,5 +1,5 @@
 import { CartState } from './state';
-import { CartProductItem, CartProductFilter, CartAddType, ParserProductsFirstJSONParse, ParserProductsType } from '../types';
+import { CartProductItem, CartProductFilter, CartAddType, ParserProductsFirstJSONParse, ParserProductsType, CartItem } from '../types';
 import { getCurrectData } from "../options";
 import { getCurrectURL } from "@/shared/helpers/helperAPI";
 import axios from "axios";
@@ -83,41 +83,35 @@ export const actions = {
     },
 
     async changeCount(context: CartState, params: {cart_count: number, cart_id: number}){
-        let url = getCurrectURL(`api/cart/${params.cart_id}`);
-        let data = getCurrectData(params);
+        let url = getCurrectURL(`api/cart/${params.cart_id}/`);
+        let data = getCurrectData({...params, '_method': 'patch'});
+        data = JSON.stringify(data);
 
         let config = {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-            }
+            },
         }
 
-        return await axios.patch(url, data, config).then(response => {
-            let product = response.data as CartProductItem;
+        return await axios.post(url, data, config).then(response => {
+            let cartItem = response.data as CartItem;
 
-                if(!context.products){
-                    context.products = [];
+            let checkElem = context.products.find(item => item.cart_id == cartItem.cart_id);
+
+            if(checkElem){
+                let indexElem = context.products.indexOf(checkElem);
+                if(cartItem.cart_count && indexElem != -1) {
+                    context.products[indexElem].count_cart = cartItem.cart_count;
+                } else{
+                    let indexElem = context.products.indexOf(checkElem);
+                    context.products.splice(indexElem, 1);
+                    context.countCart -= 1;
                 }
-
-                let data = getJSONPasrsingElem(product) as CartProductItem;
-                let checkElem = context.products.find(item => item.id === data.id);
-
-                if(checkElem){
-                    checkElem.count_cart = data.count_cart;
-                    if(!checkElem.count_cart){
-                        let indexElem = context.products.indexOf(checkElem);
-                        context.products.splice(indexElem, 1);
-                    }
-                } else {
-                    context.products.push(data);
-                }       
-
-                this.setCountCart(context);
-
-                return true;
-            }).catch(response => {
-                return false;
-            })
+            }    
+            return true;
+        }).catch(response => {
+            return false;
+        })
     }
 };
 

@@ -145,3 +145,17 @@ export type CartAddType = {
     cart_is_parsing: boolean,
     cart_count: number,
 }
+
+export type CartItem = {
+    cart_archive: boolean
+    cart_comment?: string
+    cart_count?: number
+    cart_date: string
+    cart_date_update_archive?: string
+    cart_id: number
+    cart_is_parsing: boolean
+    cart_order_id?: number
+    cart_product_id: number
+    cart_status_id?: number
+    cart_uid: number
+}
