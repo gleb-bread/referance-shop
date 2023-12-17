@@ -51,12 +51,10 @@ export default defineComponent({
 
             let result = await this.cartStore.addProductToCart(this.cartStore, productToAdd);
 
-            if(result){
-
-            } else {
+            if(!result){
                 this.handlerRequest.setAnswerRequest(this.handlerRequest, false);
                 this.handlerRequest.setTextRequest(this.handlerRequest, 'Не удалось добавить товар в корзину');
-            }
+            } 
             
         }
     },

@@ -23,15 +23,8 @@
     </v-table>
     <div
         class="d-flex justify-end pt-2 px-5">
-        <v-btn 
-            class="mr-2"
-            color="error">
-            Очистить корзину
-        </v-btn>
-        <v-btn 
-            color="success">
-            Оформить заказ
-        </v-btn>
+        <btns-create-order>
+        </btns-create-order>
     </div>
 </template>
 
@@ -41,6 +34,8 @@ import { defineComponent } from 'vue';
 import { PropType } from 'vue';
 import { useCartStore } from '@/app/stores/cart';
 import * as Helper from '@/shared/helpers/helper';
+import btnsCreateOrder from '@/widgets/createOrderPage/btnsCreateOrder.vue';
+
 export default defineComponent({
     
     emits: {
@@ -69,11 +64,10 @@ export default defineComponent({
     },
     
     methods: {
-        
     },
     
     components: {
-        
+        btnsCreateOrder
     },
 });
 </script>

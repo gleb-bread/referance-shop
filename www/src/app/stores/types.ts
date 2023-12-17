@@ -159,3 +159,18 @@ export type CartItem = {
     cart_status_id?: number
     cart_uid: number
 }
+
+export type OrderType = {
+    order_id: number,
+    order_address: string | null,
+    order_uid: number,
+    order_status_id: number | null,
+    order_substatus_id: number | null,
+    order_comment: string | null,
+    order_comment_disabled: string | null,
+    order_type_disabled_id: number | null,
+    order_date: string,
+    order_price: number,
+    order_discount: number | null,
+    order_price_view: number,
+}
