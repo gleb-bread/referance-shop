@@ -36,5 +36,28 @@ export const actions = {
         }).catch(response => {
             return false;
         }) 
-    }
+    },
+
+    async setOrders(context: OrdersState, params: any = {page: 1}){
+        context.ObserverRequest.setLoading('loading', true);
+
+        let data = getCurrectData(params);
+
+        await axios.get(getCurrectURL(`api/orders`),{params: data}).then(response => {
+            let defaultData = Object.values(response.data) as unknown as OrderType[];
+
+            context.orders = defaultData;
+            if(defaultData?.length >= 100){
+                context.isLastPage = false;
+            } else {
+                context.isLastPage = true;
+            }
+            context.page = 1;
+            context.ObserverRequest.setLoading('loading', false);
+            context.ObserverRequest.setError('errorLoading', false);
+        }).catch(responce => {
+            context.ObserverRequest.setLoading('loading', false);
+            context.ObserverRequest.setError('errorLoading', false);
+        })
+    },
 };

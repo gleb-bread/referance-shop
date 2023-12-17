@@ -3,6 +3,7 @@ import catalogPage from '../pages/catalogPage.vue';
 import categoryPage from '../pages/categoryPage.vue';
 import productPage from '../pages/productPage.vue';
 import createOrderPage from '../pages/createOrderPage.vue';
+import ordersPage from '../pages/ordersPage.vue';
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/orders',
     name: 'createOrder',
     component: createOrderPage,
+  },
+  {
+    path: '/orders_list',
+    name: 'ordersList',
+    component: ordersPage,
   }
 ]
 

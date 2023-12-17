@@ -30,7 +30,6 @@
 <script lang='ts'>
     
 import { defineComponent } from 'vue';
-import wrapperPage from './wrapperPage.vue';
 import { useParserProductsStore } from '@/app/stores/parserProducts';
 import gridCategories from '@/widgets/catalogPage/gridCategories.vue';
     
@@ -55,7 +54,6 @@ export default defineComponent({
     },
     
     components: {
-      wrapperPage,
       gridCategories
     },
 

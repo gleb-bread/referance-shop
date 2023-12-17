@@ -42,6 +42,11 @@ export default defineComponent({
                     prependIcon: 'mdi-home',
                     text: 'Главная',
                     link: '/'
+                },
+                {
+                    prependIcon: 'mdi-gift-outline',
+                    text: 'Заказы',
+                    link: '/orders_list'
                 }
             ],
 
