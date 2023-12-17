@@ -3,12 +3,14 @@
         <v-row
             justify="start">
             <counter-btn
+                v-model:model-value="valueProduct"
                 :count-clear="countClear"
                 class="max-w-300 min-w-300">
             </counter-btn>
             <v-col
                 class="max-w-300 d-flex">
-                <buy-btn>
+                <buy-btn
+                    :value-product="valueProduct">
                 </buy-btn>
                 <restore-btn
                     @handler-clear-store="handlerClearStore">
@@ -38,6 +40,8 @@ export default defineComponent({
     data() {
         return {
             countClear: 0,
+
+            valueProduct: '0',
         };
     },
     

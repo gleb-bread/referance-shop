@@ -10,9 +10,9 @@
         <v-text-field
             class="mx-width-100 pa-0 input-top-p-0 input-l-p-8"
             :variant="'underlined'"
-            :model-value="valueProduct"
+            :model-value="getModelValue"
             :rules="rules"
-            @update:model-value="valueProduct = $event">
+            @update:model-value="getModelValue = $event">
         </v-text-field>
         <v-btn
             @click.stop="handlerMinCount"
@@ -33,20 +33,34 @@ export default defineComponent({
         countClear: {
             type: Number,
             required: true,
+        },
+
+        modelValue: {
+            type: String,
+            required: true,
         }
     },
     
     emits: {
-        
+        'update:modelValue': (str: string) => true
     },
     
     computed: {
-        
+        getModelValue: {
+            get(){
+                return this.modelValue;
+            },
+
+            set(str: string){
+                if(typeof this.rules[0](str) != 'string'){
+                    this.$emit('update:modelValue', str);
+                }
+            }
+        }
     },
     
     data() {
         return {
-            valueProduct: '0',
 
             rules: [
                 (value: string) => this.validInputCount(value)
@@ -66,14 +80,14 @@ export default defineComponent({
         },
         
         handlerPlusCount(){
-            if(this.rules[0](this.valueProduct)){
-                this.valueProduct = String(Number(this.valueProduct) + 1);
+            if(this.rules[0](this.getModelValue)){
+                this.getModelValue = String(Number(this.getModelValue) + 1);
             }
         },
 
         handlerMinCount(){
-            if(this.rules[0](this.valueProduct)){
-                if(Number(this.valueProduct)) this.valueProduct = String(Number(this.valueProduct) - 1);
+            if(this.rules[0](this.getModelValue)){
+                if(Number(this.getModelValue)) this.getModelValue = String(Number(this.getModelValue) - 1);
             }
         }
     },
@@ -84,7 +98,7 @@ export default defineComponent({
 
     watch: {
         countClear: function(newVal: number){
-            this.valueProduct = '0';
+            this.getModelValue = '0';
         }
     }
 });
