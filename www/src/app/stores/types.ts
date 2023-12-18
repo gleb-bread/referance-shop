@@ -173,4 +173,7 @@ export type OrderType = {
     order_price: number,
     order_discount: number | null,
     order_price_view: number,
+    order_archive: number,
+    order_update_date_archive: string,
+    products: CartProductItem[],
 }
