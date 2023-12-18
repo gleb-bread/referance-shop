@@ -12,11 +12,15 @@
                     @click.stop="generateCSV"
                     icon="mdi-table-arrow-down">
                 </v-btn>
-                <v-btn icon="mdi-file-download">
-                </v-btn>
+                <!-- <v-btn icon="mdi-file-download"
+                    @click.stop="handlerClickPrint">
+                </v-btn> -->
             </div>
         </v-card-actions>
     </v-card>
+    <!-- <print-table
+        :order-item="orderItem">
+    </print-table> -->
 </template>
 
 <script lang='ts'>
@@ -25,6 +29,7 @@ import { defineComponent } from 'vue';
 import { PropType } from 'vue';
 import { OrderType, CartProductItem } from '@/app/stores/types';
 import * as Helper from '@/shared/helpers/helper';
+import printTable from './printTable.vue';
     
 export default defineComponent({
     props: {
@@ -106,11 +111,15 @@ export default defineComponent({
             arr.push(this.sumOrder);
         
             return arr;
+        },
+
+        handlerClickPrint(){
+            window.print();
         }
     },
     
     components: {
-        
+        printTable
     },
 });
 </script>
