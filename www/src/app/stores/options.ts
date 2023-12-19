@@ -1,5 +1,5 @@
 import { getCookie } from "@/shared/helpers/helperCookie";
-export const publicPath = 'https://copyrain.ru/';
+export const publicPath = 'https://localhost:8888/';
 
 export const getCurrectData = function(params: any){
     return {
