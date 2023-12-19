@@ -32,6 +32,10 @@ import { useRequestHandler } from './app/stores/requestHandler';
 export default defineComponent({
   name: 'App',
 
+  metaInfo: {
+
+  }, 
+
   data () {
     return {
       showMenuNavigation: false,

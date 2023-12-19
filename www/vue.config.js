@@ -5,7 +5,6 @@ const path = require('path');
 module.exports = defineConfig({
   transpileDependencies: true,
   productionSourceMap: process.env.NODE_ENV === 'development' ? true : false,
-  filenameHashing: false,
   lintOnSave: false,
   outputDir: process.env.NODE_ENV === 'development' ? 'dist' : 'production',
 

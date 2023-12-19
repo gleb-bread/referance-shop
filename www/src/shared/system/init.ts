@@ -17,6 +17,7 @@ export async function init(){
         params: {user_token: userToken},
         config: {
             'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
         }
     }
 
