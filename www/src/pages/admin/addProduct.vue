@@ -1,6 +1,9 @@
 <template>
     <v-container>
-        <v-form fast-fail @submit.prevent>
+        <v-form 
+            fast-fail 
+            ref="form"
+            @submit.prevent>
 
             <str-field
                 :label-filed="'Наименование продукта'"
@@ -87,17 +90,22 @@ export default defineComponent({
     },
     
     methods: {
-        handlerAddProduct(){
-            let currectObj = {
-                title: this.titleProduct,
-                link: '0',
-                price: this.priceProduct,
-                category: this.categoryProduct === 'Другое' ? this.categoryTextProduct : this.categoryProduct,
-                subcategory: this.subCatergoryProduct === 'Другое' ? this.subCategoryTextProduct : this.subCatergoryProduct,
-                characteristics: this.handlerGetCurrectCharacteristics(),
-            }
+        async handlerAddProduct(){
+            //@ts-ignore
+            const { valid } = await this.$refs.form.validate()
 
-            console.log(currectObj);
+            if (valid) {
+                let currectObj = {
+                    title: this.titleProduct,
+                    link: '0',
+                    price: this.priceProduct,
+                    category: this.categoryProduct === 'Другое' ? this.categoryTextProduct : this.categoryProduct,
+                    subcategory: this.subCatergoryProduct === 'Другое' ? this.subCategoryTextProduct : this.subCatergoryProduct,
+                    characteristics: this.handlerGetCurrectCharacteristics(),
+                }
+
+                console.log(currectObj);
+            }
         },
 
         handlerGetCurrectCharacteristics(){
