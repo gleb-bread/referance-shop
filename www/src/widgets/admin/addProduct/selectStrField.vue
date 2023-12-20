@@ -1,9 +1,20 @@
 <template>
     <v-select
-        :items="itemsProducts"
+        :items="itemsList"
+        variant="underlined"
         v-model:model-value="getValueField"
-        :label="labelFiled"
-    ></v-select>
+        :label="labelFiled">
+    </v-select>
+    
+    <v-fade-transition>
+        <template v-if="getValueField === 'Другое'">
+            <v-text-field
+                label="Заполните поле"
+                variant="underlined"
+                :rules="rules">
+            </v-text-field>
+        </template>
+    </v-fade-transition>
 </template>
 
 <script lang='ts'>
@@ -18,19 +29,25 @@ export default defineComponent({
             required: true,
         },
 
+        valueTextField: {
+            type: String,
+            required: true,
+        },
+
         labelFiled: {
             type: String,
             required: true,
         },
 
-        itemsProducts: {
+        itemsList: {
             type: Array as PropType<string[]>,
             required: true,
         }
     },
     
     emits: {
-        'update:valueField': (str: string) => true
+        'update:valueField': (str: string) => true,
+        'update:valueTextField': (str: string) => true
     },
     
     computed: {
@@ -40,8 +57,20 @@ export default defineComponent({
             },
 
             set(str: string){
-                if(this.rules[0](str)){
+                if(typeof this.rules[0](str) != 'string'){
                     this.$emit('update:valueField', str);
+                }
+            }
+        },
+
+        getValueTextField: {
+            get(){
+                return this.valueTextField;
+            },
+
+            set(str: string){
+                if(typeof this.rules[0](str) != 'string'){
+                    this.$emit('update:valueTextField', str);
                 }
             }
         }

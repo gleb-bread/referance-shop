@@ -7,21 +7,34 @@
                 v-model:value-product="titleProduct">
             </str-field>
 
-            <str-field
+            <select-str-field
                 :label-filed="'Категория продукта'"
-                v-model:value-product="categoryProduct">
-            </str-field>
+                v-model:value-field="categoryProduct"
+                :items-list="getCategoriesList"
+                v-model:value-text-field="categoryTextProduct">
+            </select-str-field>
 
-            <str-field
+            <select-str-field
                 :label-filed="'Подкатегория продукта'"
-                v-model:value-product="subCatergoryProduct">
-            </str-field>
+                v-model:value-field="subCatergoryProduct"
+                :items-list="getSubctegoriesList"
+                v-model:value-text-field="subCategoryTextProduct">
+            </select-str-field>
+
+            <characteristic-block
+                v-model:characteristics-list="characteristicsList">
+            </characteristic-block>
 
             <price-field
                 v-model:price-product="priceProduct">
             </price-field>
 
-            <v-btn type="submit" block class="mt-2">Submit</v-btn>
+            <v-btn 
+                type="submit" 
+                color="success"
+                block 
+                @click.stop="handlerAddProduct"
+                class="mt-2">Добавить товар</v-btn>
         </v-form>
     </v-container>
 </template>
@@ -32,7 +45,9 @@ import { defineComponent } from 'vue';
 import { PropType } from 'vue';
 import strField from '@/widgets/admin/addProduct/strField.vue';
 import priceField from '@/widgets/admin/addProduct/priceField.vue';
+import selectStrField from '@/widgets/admin/addProduct/selectStrField.vue';
 import { useParserProductsStore } from '@/app/stores/parserProducts';
+import characteristicBlock from '@/widgets/admin/addProduct/characteristicBlock.vue';
     
 export default defineComponent({
     
@@ -41,7 +56,20 @@ export default defineComponent({
     },
     
     computed: {
+        getCategoriesList(): string[]{
+            return [...Object.keys(this.ParserProductsStore.getParserCategories), 'Другое'];
+        },
         
+        getSubctegoriesList(){
+
+            let result = [] as string[];
+
+            Object.values(this.ParserProductsStore.getParserCategories).forEach(item => {
+                result = result.concat(item);
+            })
+
+            return [...result, 'Другое'];
+        }
     },
     
     data() {
@@ -49,24 +77,49 @@ export default defineComponent({
             titleProduct: '',
             priceProduct: '',
             categoryProduct: '',
+            categoryTextProduct: '',
             subCatergoryProduct: '',
+            subCategoryTextProduct: '',
+            characteristicsList: [] as {key: string, value: string}[],
 
             ParserProductsStore: useParserProductsStore(),
         };
     },
     
     methods: {
-        
+        handlerAddProduct(){
+            let currectObj = {
+                title: this.titleProduct,
+                link: '0',
+                price: this.priceProduct,
+                category: this.categoryProduct === 'Другое' ? this.categoryTextProduct : this.categoryProduct,
+                subcategory: this.subCatergoryProduct === 'Другое' ? this.subCategoryTextProduct : this.subCatergoryProduct,
+                characteristics: this.handlerGetCurrectCharacteristics(),
+            }
+
+            console.log(currectObj);
+        },
+
+        handlerGetCurrectCharacteristics(){
+            let obj = {} as any;
+            this.characteristicsList.forEach(item => {
+                obj[item.key] = item.value;
+            });
+
+            return JSON.stringify(obj);
+        }
     },
     
     components: {
         strField,
-        priceField
+        priceField,
+        selectStrField,
+        characteristicBlock
     },
 
     created(){
         this.ParserProductsStore.setParserCategories(this.ParserProductsStore);
-    }
+    },
 });
 </script>
     
