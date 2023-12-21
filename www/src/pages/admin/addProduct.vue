@@ -104,7 +104,7 @@ export default defineComponent({
                     characteristics: this.handlerGetCurrectCharacteristics(),
                 }
 
-                console.log(currectObj);
+                
             }
         },
 
