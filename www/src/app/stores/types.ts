@@ -177,3 +177,12 @@ export type OrderType = {
     order_update_date_archive: string,
     products: CartProductItem[],
 }
+
+export type ProductAddType = {
+    title: string,
+    link: string,
+    price: number,
+    category: string,
+    subcategory: string,
+    characteristics: string,
+}

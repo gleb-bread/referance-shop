@@ -1,4 +1,4 @@
-import { ParserProductsType, ParserProductsFirstJSONParse, ParserProductsFilter } from "../types";
+import { ParserProductsType, ParserProductsFirstJSONParse, ParserProductsFilter, ProductAddType } from "../types";
 import { getCurrectData } from "../options";
 import { ProductsState } from './state';
 import { getCurrectURL } from "@/shared/helpers/helperAPI";
@@ -117,20 +117,32 @@ export const actions = {
         })
     },
 
-    async addProducts(context: ProductsState, data: any){
+    async addProducts(context: ProductsState, params: ProductAddType){
+        let url = getCurrectURL('api/products');
         let data = getCurrectData(params);
+        data = JSON.stringify(data);
 
-
-        axios.post(getCurrectURL(`api/products`),{params: data}).then(response => {
-            let defaultData = getJSONPasrsingObject(response.data as unknown as string);
-            
-            if(params.page){
-                context.page = <number> params.page;
+        let config = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
             }
-           
-        }).catch(responce => {
-            
-        })
+        }
+
+        return await axios.post(url, data, config).then(response => {
+            let newOrder = response.data as ParserProductsType;
+
+            if(!context.products){
+                context.products = [];
+            }
+
+            let data = newOrder;
+
+            context.products.push(data);
+
+            return true;
+        }).catch(response => {
+            return false;
+        }) 
     },
 
     setSubcategoryShow(context: ProductsState, flag: boolean){

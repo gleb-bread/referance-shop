@@ -5,7 +5,7 @@ import { actions } from './actions';
 import { ProductsState } from './state';
 
 
-export const useOrdersStore = defineStore('orders', {
+export const useProductsStore = defineStore('products', {
     state: (): ProductsState => {
         return State;
     },

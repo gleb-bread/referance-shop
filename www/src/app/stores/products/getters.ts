@@ -1,15 +1,15 @@
 import { ProductsState } from "./state";
 
 export const getters = {
-    getOrders(state: ProductsState){
-        return state.orders;
+    getProducts(state: ProductsState){
+        return state.products;
     },
 
     getLoading(state: ProductsState){
-        return state.ObserverRequest.getMixLoading('loading');
+        return state.requestObserver.getMixLoading('loadingProduct');
     },
     
     getError(state: ProductsState){
-        return state.ObserverRequest.getMixError('errorLoading');
+        return state.requestObserver.getMixError('errorCategory');
     },
 }

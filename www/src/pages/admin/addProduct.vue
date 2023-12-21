@@ -51,6 +51,8 @@ import priceField from '@/widgets/admin/addProduct/priceField.vue';
 import selectStrField from '@/widgets/admin/addProduct/selectStrField.vue';
 import { useParserProductsStore } from '@/app/stores/parserProducts';
 import characteristicBlock from '@/widgets/admin/addProduct/characteristicBlock.vue';
+import { useProductsStore } from '@/app/stores/products';
+import { useRequestHandler } from '@/app/stores/requestHandler';
     
 export default defineComponent({
     
@@ -84,8 +86,11 @@ export default defineComponent({
             subCatergoryProduct: '',
             subCategoryTextProduct: '',
             characteristicsList: [] as {key: string, value: string}[],
+            
 
             ParserProductsStore: useParserProductsStore(),
+            productsStore: useProductsStore(),
+            requestHandler: useRequestHandler(),
         };
     },
     
@@ -97,13 +102,20 @@ export default defineComponent({
             if (valid) {
                 let currectObj = {
                     title: this.titleProduct,
-                    link: '0',
-                    price: this.priceProduct,
+                    price: Number(this.priceProduct) ? Number(this.priceProduct) : 0,
                     category: this.categoryProduct === 'Другое' ? this.categoryTextProduct : this.categoryProduct,
                     subcategory: this.subCatergoryProduct === 'Другое' ? this.subCategoryTextProduct : this.subCatergoryProduct,
                     characteristics: this.handlerGetCurrectCharacteristics(),
                 }
 
+                let result = await this.productsStore.addProducts(this.productsStore, currectObj);
+                if(result){
+                    this.requestHandler.setAnswerRequest(this.requestHandler, true);
+                    this.requestHandler.setTextRequest(this.requestHandler, 'Товар успешно добавлен');
+                } else {
+                    this.requestHandler.setAnswerRequest(this.requestHandler, false);
+                    this.requestHandler.setTextRequest(this.requestHandler, 'Не удалось добавить товар');
+                }
                 
             }
         },
