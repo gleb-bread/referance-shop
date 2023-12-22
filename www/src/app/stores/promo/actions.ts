@@ -2,6 +2,7 @@ import { Store } from './state';
 import { PromoAddedType, PromoType, PromoOptions } from '../types';
 import { getCurrectURL } from '@/shared/helpers/helperAPI';
 import { getCurrectData } from '../options';
+import { useRequestHandler } from '../requestHandler';
 import axios from 'axios';
 
 export const actions = {
@@ -89,6 +90,19 @@ export const actions = {
             return false;
         })
 
+    },
+
+    async checkPromo(context: Store, codePromo: string): Promise<number | string>{
+        let url = getCurrectURL(`api/promo/${codePromo}`);
+        let data = getCurrectData({});
+
+        return axios.get(url, {params: data}).then(response => {
+            if(response.data.success) return <number> response.data.promo_id;
+            return <string> response.data.message;
+        }).catch(responce => {
+            console.error('checkPromo error');
+            return '';
+        })
     }
 
 }

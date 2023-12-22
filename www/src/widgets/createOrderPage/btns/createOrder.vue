@@ -21,6 +21,8 @@
                     <v-text-field
                         variant="underlined"
                         placeholder="У вас есть промокод?"
+                        :error="errroPromo"
+                        :error-messages="messageErrroPromo"
                         v-model:model-value="promo"
                         label="Промокод">
                     </v-text-field>
@@ -47,6 +49,7 @@ import { defineComponent } from 'vue';
 import { PropType } from 'vue';
 import { useRequestHandler } from '@/app/stores/requestHandler';
 import { useOrdersStore } from '@/app/stores/orders';
+import { usePromoStore } from '@/app/stores/promo';
 
     
 export default defineComponent({
@@ -63,8 +66,11 @@ export default defineComponent({
         return {
             showDialog: false,
             promo: '',
+            errroPromo: false,
+            messageErrroPromo: '',
 
             ordersStore: useOrdersStore(),
+            promoStore: usePromoStore(),
 
             handlerRequest: useRequestHandler(),
         };
@@ -72,16 +78,34 @@ export default defineComponent({
     
     methods: {
         async handlerCreateOrder(){
-            let result = await this.ordersStore.addOrder(this.ordersStore, {order_discount: 0});
+            let promoId = null as number | string | null;
 
-            if(result){
-                this.showDialog = false;
-                this.handlerRequest.setAnswerRequest(this.handlerRequest, true);
-                this.handlerRequest.setTextRequest(this.handlerRequest, 'Заказ успешно оформлен');
-            } else {
-                this.handlerRequest.setAnswerRequest(this.handlerRequest, false);
-                this.handlerRequest.setTextRequest(this.handlerRequest, 'Не оформить заказ');
+            if(this.promo){
+                promoId = await this.getDiscountFromPromo();
             }
+
+            if(typeof promoId != 'string' || promoId === null){
+                this.promoStore
+                let result = await this.ordersStore.addOrder(this.ordersStore, {'promo_id': <number> promoId});
+
+                if(result){
+                    this.showDialog = false;
+                    this.handlerRequest.setAnswerRequest(this.handlerRequest, true);
+                    this.handlerRequest.setTextRequest(this.handlerRequest, 'Заказ успешно оформлен');
+                } else {
+                    this.handlerRequest.setAnswerRequest(this.handlerRequest, false);
+                    this.handlerRequest.setTextRequest(this.handlerRequest, 'Не оформить заказ');
+                }
+            } else {
+                this.errroPromo = true;
+                this.messageErrroPromo = promoId;
+            }
+        },
+
+        async getDiscountFromPromo(): Promise<number | string>{
+            let result = await this.promoStore.checkPromo(this.promoStore, this.promo);
+            
+            return result;
         }
     },
     

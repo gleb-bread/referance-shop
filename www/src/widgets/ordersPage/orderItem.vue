@@ -4,7 +4,9 @@
             Заказ №{{ orderItem.order_id }}
         </v-card-title>
         <v-card-text>
-            Cумма: {{ orderItem.order_price_view }}
+            Cумма: {{ orderItem.order_price_view }}<br>
+            Cкидка: {{ orderItem.order_discount ? orderItem.order_discount : 0  }}%<br>
+            Cкидка(руб): {{ Helper.convertMoneyType(String(orderItem.order_price - Helper.getZeroIfNumNotExist(orderItem.order_price_view))) }}
         </v-card-text>
         <v-card-actions>
             <div class="d-flex">

@@ -7,7 +7,7 @@ import axios from "axios";
 
 
 export const actions = {
-    async addOrder(context: OrdersState, params: {order_discount?: number}){
+    async addOrder(context: OrdersState, params: {promo_id: number | null}){
         let url = getCurrectURL('api/orders');
         let data = getCurrectData(params);
         data = JSON.stringify(data);
