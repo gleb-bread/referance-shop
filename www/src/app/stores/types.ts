@@ -206,6 +206,7 @@ export type PromoLoadingType = {
 }
 
 export type PromoOptions = {
+    promo_id: number,
     promo_code?: string,
     promo_discount?: number,
     promo_archive?: boolean,

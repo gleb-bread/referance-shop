@@ -5,6 +5,7 @@ import productPage from '../pages/productPage.vue';
 import createOrderPage from '../pages/createOrderPage.vue';
 import ordersPage from '../pages/ordersPage.vue';
 import addProduct from '../pages/admin/addProduct.vue';
+import addPromo from '../pages/admin/addPromo.vue';
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/admin/add_product',
     name: 'addProduct',
     component: addProduct,
+  },
+  {
+    path: '/admin/add_promo',
+    name: 'addPromo',
+    component: addPromo,
   }
 ]
 

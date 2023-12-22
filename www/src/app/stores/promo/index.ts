@@ -5,7 +5,7 @@ import { actions } from './actions';
 import { Store } from './state';
 
 
-export const usePromos = defineStore('promo', {
+export const usePromoStore = defineStore('promo', {
     state: (): Store => {
         return State;
     },

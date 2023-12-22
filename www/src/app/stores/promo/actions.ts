@@ -2,10 +2,7 @@ import { Store } from './state';
 import { PromoAddedType, PromoType, PromoOptions } from '../types';
 import { getCurrectURL } from '@/shared/helpers/helperAPI';
 import { getCurrectData } from '../options';
-import { usePromos } from '.';
 import axios from 'axios';
-
-const promoStore = usePromos();
 
 export const actions = {
     async addPromo(context: Store, params: PromoAddedType){
@@ -68,8 +65,9 @@ export const actions = {
     },
 
     async changePromo(context: Store, options: PromoOptions){
-        let url = getCurrectURL('api/promo');
+        let url = getCurrectURL(`api/promo/${options.promo_id}`);
         let data = getCurrectData(options);
+        data = JSON.stringify(data);
 
         let config = {
             headers: {
@@ -77,12 +75,18 @@ export const actions = {
             }
         }
 
-        return await axios.patch(url, data, config).then(response => {
+        return await axios.post(url, data, config).then(response => {
             let updatedPromo = response.data as PromoType;
-            let promoInStore = promoStore.getPromos.find(item => item.promo_id === updatedPromo.promo_id);
+            let promoInStore = context.promos.find(item => item.promo_id === updatedPromo.promo_id);
             if(promoInStore){
-                
+                Object.keys(options).forEach((item) => {
+                    //@ts-ignore
+                    (<PromoType> promoInStore)[item as keyof PromoOptions] = <unknown>options[item];
+                });
             }
+            return true;
+        }).catch(response => {
+            return false;
         })
 
     }
