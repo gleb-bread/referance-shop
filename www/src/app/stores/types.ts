@@ -180,9 +180,33 @@ export type OrderType = {
 
 export type ProductAddType = {
     title: string,
-    link: string,
     price: number,
     category: string,
     subcategory: string,
     characteristics: string,
+}
+
+export type PromoType = {
+    promo_id: number,
+    promo_code: string,
+    promo_discount: number,
+    promo_date: string,
+    promo_archive: boolean,
+    promo_archive_date: string | null,
+}
+
+export type PromoAddedType = {
+    promo_code: string,
+    promo_discount: number,
+}
+
+export type PromoLoadingType = {
+    loading: boolean,
+    error: boolean,
+}
+
+export type PromoOptions = {
+    promo_code?: string,
+    promo_discount?: number,
+    promo_archive?: boolean,
 }
