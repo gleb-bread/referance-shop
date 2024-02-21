@@ -1,16 +1,6 @@
 <template>
-    <v-app-bar
-        color="primary"
-        :elevation="2">
-        <v-app-bar-nav-icon>
-            <v-btn
-                @click.stop="getShowMenuNavigation = !getShowMenuNavigation"
-                icon="mdi-menu">
-            </v-btn>
-        </v-app-bar-nav-icon>
-        <v-app-bar-title>
-            {{ getTitle }}
-        </v-app-bar-title>
+    <primary-app-bar>
+        
         <v-spacer></v-spacer>
         <v-btn 
             @click.stop="getShowSubcategories = !getShowSubcategories"
@@ -33,7 +23,7 @@
                 </v-icon>
             </v-fade-transition>
         </v-btn>
-    </v-app-bar>
+    </primary-app-bar>
 </template>
 
 <script lang='ts'>
@@ -41,11 +31,13 @@
 import { defineComponent } from 'vue';
 import { useMenuStore } from '@/app/stores/menu/index';
 import { useCartStore } from '@/app/stores/cart';
+import { menuLinks } from '@/shared/struct/menu/links';
+import desktopTitle from './headMenu/desktopTitle.vue';
     
 export default defineComponent({
     computed: {
         getShowMenuNavigation: {
-            get(){
+            get(): boolean{
                 return this.menuStore.getMenuNavigationShow;
             },
             set(flag: boolean){
@@ -54,7 +46,7 @@ export default defineComponent({
         },
 
         getShowSubcategories: {
-            get(){
+            get(): boolean{
                 return this.menuStore.getMenuSubcategoriesShow;
             },
             set(flag: boolean){
@@ -63,7 +55,7 @@ export default defineComponent({
         },
 
         getCartShow: {
-            get(){
+            get(): boolean{
                 return this.menuStore.getCartShow;
             },
 
@@ -72,11 +64,11 @@ export default defineComponent({
             }
         },
 
-        getTitle(){
+        getTitle(): string{
             return this.menuStore.getMenuTitle;
         },
 
-        getSubcategoriesShowBtn(){
+        getSubcategoriesShowBtn(): boolean{
             return this.menuStore.getMenuSubcategoriesBtn;
         }
     },
@@ -85,18 +77,26 @@ export default defineComponent({
         return {
             menuStore: useMenuStore(),
             cartStore: useCartStore(),
+
+            menuLinks: menuLinks,
         };
     },
     
     methods: {
-        
+
     },
     
     components: {
-        
+        desktopTitle
     },
 });
 </script>
     
 <style scoped lang='scss'>
+
+.v-btn--menu-links{
+    transition-property: all;
+    transition-duration: .3s;
+}
+
 </style>

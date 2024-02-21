@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import catalogPage from '../pages/catalogPage.vue';
 import categoryPage from '../pages/categoryPage.vue';
 import productPage from '../pages/productPage.vue';
@@ -6,11 +6,17 @@ import createOrderPage from '../pages/createOrderPage.vue';
 import ordersPage from '../pages/ordersPage.vue';
 import addProduct from '../pages/admin/addProduct.vue';
 import addPromo from '../pages/admin/addPromo.vue';
+import primaryPage from '../pages/primaryPage.vue';
 
 const routes = [
   {
     path: '/',
     name: 'home',
+    component: primaryPage
+  },
+  {
+    path: '/catalog',
+    name: 'catalog',
     component: catalogPage
   },
   {
@@ -46,7 +52,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 

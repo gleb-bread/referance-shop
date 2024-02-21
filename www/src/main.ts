@@ -13,7 +13,7 @@ const pinia = createPinia();
 
 createApp(App)
   .use(pinia)
-  .use(router)
+  .use(router)     
   .use(vuetify)
   .use(init)
   .use(test)
